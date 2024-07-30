@@ -9,6 +9,8 @@
   <meta content="" name="description">
   <meta content="" name="keywords">
 
+  <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9.17.2/dist/sweetalert2.min.js"></script>
   <!-- Favicons -->
   <link href="<?=site_url()?>/assets/img/favicon.png" rel="icon">
   <link href="<?=site_url()?>/assets/img/apple-touch-icon.png" rel="apple-touch-icon">
@@ -25,6 +27,9 @@
   <link href="<?=site_url()?>/assets/vendor/quill/quill.bubble.css" rel="stylesheet">
   <link href="<?=site_url()?>/assets/vendor/remixicon/remixicon.css" rel="stylesheet">
   <link href="<?=site_url()?>/assets/vendor/simple-datatables/style.css" rel="stylesheet">
+  
+  <!-- Sweet alert -->
+  <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/sweetalert2@9.17.2/dist/sweetalert2.min.css">
 
   <!-- Template Main CSS File -->
   <link href="<?=site_url()?>/assets/css/style.css" rel="stylesheet">
@@ -101,72 +106,6 @@
 
   </header><!-- End Header -->
 
-  <!-- ======= Sidebar ======= -->
-  <aside id="sidebar" class="sidebar">
-
-    <ul class="sidebar-nav" id="sidebar-nav">
-
-      <li class="nav-item">
-        <a class="nav-link " href="index.html">
-          <i class="bi bi-grid"></i>
-          <span>Dashboard</span>
-        </a>
-      </li><!-- End Dashboard Nav -->
-
-      <li class="nav-item">
-        <a class="nav-link collapsed" data-bs-target="#transactions-nav" data-bs-toggle="collapse" href="#">
-          <i class="bi bi-menu-button-wide"></i><span>Transactions</span><i class="bi bi-chevron-down ms-auto"></i>
-        </a>
-        <ul id="transactions-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
-          <li>
-            <a href="transactions-alerts.html">
-              <i class="bi bi-circle"></i><span>Need Confirmation</span>
-            </a>
-          </li>
-          <li>
-            <a href="transactions-alerts.html">
-              <i class="bi bi-circle"></i><span>Waiting Delivery</span>
-            </a>
-          </li>
-          <li>
-            <a href="transactions-alerts.html">
-              <i class="bi bi-circle"></i><span>All Transactions</span>
-            </a>
-          </li>
-        </ul>
-      </li><!-- End Transactions Nav -->
-
-      <li class="nav-item">
-        <a class="nav-link collapsed" data-bs-target="#products-nav" data-bs-toggle="collapse" href="#">
-          <i class="bi bi-menu-button-wide"></i><span>Products</span><i class="bi bi-chevron-down ms-auto"></i>
-        </a>
-        <ul id="products-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
-          <li>
-            <a href="products-alerts.html">
-              <i class="bi bi-circle"></i><span>Product</span>
-            </a>
-          </li>
-        </ul>
-      </li><!-- End Products Nav -->
-
-      <li class="nav-heading">Account</li>
-
-      <li class="nav-item">
-        <a class="nav-link collapsed" href="pages-register.html">
-          <i class="bi bi-gear"></i>
-          <span>Account Settings</span>
-        </a>
-      </li><!-- End Account Settings Account Nav -->
-
-      <li class="nav-item">
-        <a class="nav-link collapsed" href="pages-login.html">
-          <i class="bi bi-box-arrow-right"></i>
-          <span>Sign Out</span>
-        </a>
-      </li><!-- End Sign Out Page Nav -->
-
-    </ul>
-
-  </aside><!-- End Sidebar-->
+  <?= $this->include('Admin/Layout/Sidebar') ?>
 
   <main id="main" class="main">

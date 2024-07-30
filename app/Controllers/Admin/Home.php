@@ -7,8 +7,18 @@ use CodeIgniter\HTTP\ResponseInterface;
 
 class Home extends BaseController
 {
+    protected $menu;
+
+    public function __construct()
+    {
+        $this->menu = "Dashboard";
+    }
+
     public function index()
     {
-        return view('Admin/Home/Dashboard');
+        $data = [
+            "menu" => $this->menu
+        ];
+        return view('Admin/Home/Dashboard', $data);
     }
 }
