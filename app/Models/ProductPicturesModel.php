@@ -21,7 +21,7 @@ class ProductPicturesModel extends Model
     protected array $castHandlers = [];
 
     // Dates
-    protected $useTimestamps = false;
+    protected $useTimestamps = true;
     protected $dateFormat    = 'datetime';
     protected $createdField  = 'created_at';
     protected $updatedField  = 'updated_at';
@@ -46,6 +46,12 @@ class ProductPicturesModel extends Model
 
     protected function beforeAdd(array $data){
         $data['data']['is_deleted'] = false;
+        $data['data']['created_by'] = session()->get('username_admin');
+        return $data;
+    }
+
+    protected function beforeUpdate(array $data){
+        $data['data']['updated_by'] = session()->get('username_admin');
         return $data;
     }
 
@@ -58,7 +64,8 @@ class ProductPicturesModel extends Model
         $builder->where($this->primaryKey, $data['id'][0]); // Where clause to select the deleted row
         $builder->update([
             'is_deleted' => true,
-            'deleted_at' => date('Y-m-d H:i:s')
+            'deleted_at' => date('Y-m-d H:i:s'),
+            'deleted_by' => session()->get('username_admin'),
         ]);
     }
 }

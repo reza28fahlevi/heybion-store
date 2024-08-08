@@ -6,13 +6,13 @@ use CodeIgniter\Model;
 
 class AdminModel extends Model
 {
-    protected $table            = 'admins';
-    protected $primaryKey       = 'id';
+    protected $table            = 'usr_admin';
+    protected $primaryKey       = 'admin_id';
     protected $useAutoIncrement = true;
-    protected $returnType       = 'array';
+    protected $returnType       = 'object';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-    protected $allowedFields    = [];
+    protected $allowedFields    = ['username','password'];
 
     protected bool $allowEmptyInserts = false;
     protected bool $updateOnlyChanged = true;

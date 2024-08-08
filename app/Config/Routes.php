@@ -12,6 +12,10 @@ $routes->get('uploads/(:any)/(:any)', 'Files::view/$1/$2');
 $routes->group('hb-admin', static function ($routes) {
     $routes->get('/', 'Admin\Home::index');
 
+    $routes->get('login', 'Admin\Login::index');
+    $routes->post('login', 'Admin\Login::login');
+    $routes->get('sign_out', 'Admin\Login::logout');
+
     $routes->get('products', 'Admin\Products::index');
     $routes->post('products/fetch', 'Admin\Products::fetch');
     $routes->post('products/add', 'Admin\Products::add');

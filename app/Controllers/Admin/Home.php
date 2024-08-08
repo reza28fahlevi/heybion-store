@@ -14,8 +14,20 @@ class Home extends BaseController
         $this->menu = "Dashboard";
     }
 
+    private function checkLogin(){
+        $session = session();
+        if (!$session->get('logged_admin')) {
+            return false;
+        }else{
+            return true;
+        }
+    }
+
     public function index()
     {
+        if (!$this->checkLogin()) {
+            return redirect()->to('hb-admin/login');
+        }
         $data = [
             "menu" => $this->menu
         ];

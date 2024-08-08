@@ -19,8 +19,20 @@ class Products extends BaseController
         $this->modelGallery = new ProductPicturesModel();
     }
     
+    private function checkLogin(){
+        $session = session();
+        if (!$session->get('logged_admin')) {
+            return false;
+        }else{
+            return true;
+        }
+    }
+
     public function index()
     {
+        if (!$this->checkLogin()) {
+            return redirect()->to('hb-admin/login');
+        }
         $data = [
             "menu" => $this->menu
         ];
@@ -29,6 +41,9 @@ class Products extends BaseController
 
     public function fetch()
     {
+        if (!$this->checkLogin()) {
+            return redirect()->to('hb-admin/login');
+        }
         // Read the parameters sent by DataTables
         $start = (int) $this->request->getPost('start');
         $length = $this->request->getPost('length');
@@ -62,6 +77,9 @@ class Products extends BaseController
 
     public function add()
     {
+        if (!$this->checkLogin()) {
+            return redirect()->to('hb-admin/login');
+        }
         $error = "";
         // Get form data
         $product_name = htmlspecialchars((string)$this->request->getPost('product_name'),ENT_QUOTES);
@@ -147,6 +165,9 @@ class Products extends BaseController
     }
 
     public function getProduct($id){
+        if (!$this->checkLogin()) {
+            return redirect()->to('hb-admin/login');
+        }
         $product = $this->model->find($id);
 
         if($product){
@@ -165,6 +186,9 @@ class Products extends BaseController
 
     public function update()
     {
+        if (!$this->checkLogin()) {
+            return redirect()->to('hb-admin/login');
+        }
         $error = "";
         $id = $this->request->getPost('product_id');
 
@@ -251,6 +275,9 @@ class Products extends BaseController
 
     public function delete()
     {
+        if (!$this->checkLogin()) {
+            return redirect()->to('hb-admin/login');
+        }
         $id = $this->request->getPost('id'); // Get the ID from the AJAX request
         
         // Check if the product exists
@@ -269,6 +296,9 @@ class Products extends BaseController
 
     public function gallery($id)
     {
+        if (!$this->checkLogin()) {
+            return redirect()->to('hb-admin/login');
+        }
         $product_detail = $this->model->where('product_id', $id)->first();
         $data = [
             "menu" => $this->menu,
@@ -280,6 +310,9 @@ class Products extends BaseController
 
     public function fetchGallery()
     {
+        if (!$this->checkLogin()) {
+            return redirect()->to('hb-admin/login');
+        }
         $p_id = $this->request->getPost('product_id');
         // Read the parameters sent by DataTables
         $start = (int) $this->request->getPost('start');
@@ -306,6 +339,9 @@ class Products extends BaseController
 
     public function addGallery()
     {
+        if (!$this->checkLogin()) {
+            return redirect()->to('hb-admin/login');
+        }
         $error = "";
         // Get form data
         $product_id = htmlspecialchars((string)$this->request->getPost('product_id'),ENT_QUOTES);
@@ -352,6 +388,9 @@ class Products extends BaseController
     }
 
     public function deleteGallery(){
+        if (!$this->checkLogin()) {
+            return redirect()->to('hb-admin/login');
+        }
         $id = $this->request->getPost('id'); // Get the ID from the AJAX request
         
         // Check if the product exists

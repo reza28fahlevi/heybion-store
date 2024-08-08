@@ -6,7 +6,7 @@ class Home extends BaseController
 {
     public function index(): string
     {
-        pre(site_url("public/assets/"));
+        // pre(site_url("public/assets/"));
         return view('welcome_message');
     }
 }

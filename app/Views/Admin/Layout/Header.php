@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-  <title>Dashboard - NiceAdmin Bootstrap Template</title>
+  <title>HeyBion Store</title>
   <meta content="" name="description">
   <meta content="" name="keywords">
 
@@ -84,7 +84,7 @@
             </li>
 
             <li>
-              <a class="dropdown-item d-flex align-items-center" href="users-profile.html">
+              <a class="dropdown-item d-flex align-items-center" href="<?=site_url('hb-admin/account_settings')?>">
                 <i class="bi bi-gear"></i>
                 <span>Account Settings</span>
               </a>
@@ -94,7 +94,7 @@
             </li>
 
             <li>
-              <a class="dropdown-item d-flex align-items-center" href="#">
+              <a class="dropdown-item d-flex align-items-center" href="<?=site_url('hb-admin/sign_out')?>">
                 <i class="bi bi-box-arrow-right"></i>
                 <span>Sign Out</span>
               </a>
