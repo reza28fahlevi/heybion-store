@@ -5,8 +5,9 @@ use CodeIgniter\Router\RouteCollection;
 /**
  * @var RouteCollection $routes
  */
-$routes->get('/', 'Home::index');
+$routes->get('/', 'User\Home::index');
 $routes->get('uploads/(:any)/(:any)', 'Files::view/$1/$2');
+$routes->get('product/(:any)', 'User\Home::product/$1');
 
 // $routes->get('/hb-admin', 'Admin\Home::index');
 $routes->group('hb-admin', static function ($routes) {
