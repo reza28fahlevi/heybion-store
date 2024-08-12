@@ -8,6 +8,10 @@ use CodeIgniter\Router\RouteCollection;
 $routes->get('/', 'User\Home::index');
 $routes->get('uploads/(:any)/(:any)', 'Files::view/$1/$2');
 $routes->get('product/(:any)', 'User\Home::product/$1');
+$routes->get('getproduct/(:any)', 'User\Home::getproduct/$1');
+$routes->post('addcart', 'User\Transactions::addcart');
+
+$routes->post('login', 'User\Login::login');
 
 // $routes->get('/hb-admin', 'Admin\Home::index');
 $routes->group('hb-admin', static function ($routes) {

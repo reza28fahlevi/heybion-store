@@ -8,6 +8,9 @@
   <meta content="" name="description">
   <meta content="" name="keywords">
 
+  <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9.17.2/dist/sweetalert2.min.js"></script>
+  <script src="https://cdn.datatables.net/2.1.2/js/dataTables.js"></script>
   <!-- Favicons -->
   <link href="<?= site_url() ?>assets_user/img/favicon.png" rel="icon">
   <link href="<?= site_url() ?>assets_user/img/apple-touch-icon.png" rel="apple-touch-icon">
@@ -23,6 +26,10 @@
   <link href="<?= site_url() ?>assets_user/vendor/aos/aos.css" rel="stylesheet">
   <link href="<?= site_url() ?>assets_user/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
   <link href="<?= site_url() ?>assets_user/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
+  
+  <!-- Sweet alert -->
+  <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/sweetalert2@9.17.2/dist/sweetalert2.min.css">
+  <link rel="stylesheet" href="https://cdn.datatables.net/2.1.2/css/dataTables.dataTables.css" />
 
   <!-- Main CSS File -->
   <link href="<?= site_url() ?>assets_user/css/main.css" rel="stylesheet">

@@ -35,4 +35,21 @@ class Home extends BaseController
         ];
         return view('User/Gallery/View_Product', $data);
     }
+
+    public function getProduct($id){
+        $product = $this->productModel->find($id);
+
+        if($product){
+            return $this->response->setJSON([
+                'status' => 'success',
+                'message' => "Success to get data ".$product->product_name." from catalog",
+                'data' => $product
+            ]);
+        }else{
+            return $this->response->setJSON([
+                'status' => 'error',
+                'message' => "Failed. Product not found",
+            ]);
+        }
+    }
 }
