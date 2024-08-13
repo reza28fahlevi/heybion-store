@@ -130,7 +130,11 @@
         $('#min-qty').on('click', function() {
             var qty = $('#qty').val()
             
-            $('#qty').val(qty - 1) 
+            if((qty-1) < 1){
+                $('#qty').val(1) 
+            }else{
+                $('#qty').val(qty - 1) 
+            }
             checkStock()
         });
 

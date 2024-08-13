@@ -28,7 +28,7 @@
                     <div class="gallery-item h-100">
                     <img src="<?= site_url('uploads/thumbnails/') . $product->thumbnail ?>" class="img-fluid" alt="">
                     <div class="gallery-links d-flex align-items-center justify-content-center">
-                        <span><?= $product->product_name . " Rp. " . $product->price_tag ?></span>
+                        <span style="color: #f4f4f4"><?= $product->product_name . " Rp. " . $product->price_tag ?></span>
                         <a href="<?= site_url('product/').$product->product_id ?>" class="details-link"><i class="bi bi-eye"></i></a>
                     </div>
                     </div>
