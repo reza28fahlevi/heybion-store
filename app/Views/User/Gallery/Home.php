@@ -6,7 +6,7 @@
       <div class="container">
         <div class="row justify-content-center">
           <div class="col-lg-6 text-center" data-aos="fade-up" data-aos-delay="100">
-            <h2><span class="underlight">HeyBion Store</span> is officially online store for wearable suit</h2>
+            <h2><span class="underlight" style="color: #ffd700;">HeyBion Store</span> is officially online store for wearable suit</h2>
             <p>See our gallery products.</p>
           </div>
         </div>

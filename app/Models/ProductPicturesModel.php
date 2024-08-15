@@ -37,7 +37,7 @@ class ProductPicturesModel extends Model
     protected $allowCallbacks = true;
     protected $beforeInsert   = ['beforeAdd'];
     protected $afterInsert    = [];
-    protected $beforeUpdate   = [];
+    protected $beforeUpdate   = ['beforeUpdate'];
     protected $afterUpdate    = [];
     protected $beforeFind     = [];
     protected $afterFind      = [];

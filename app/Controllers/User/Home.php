@@ -23,6 +23,7 @@ class Home extends BaseController
             "menu" => $this->menu,
             "products" => $productList,
         ];
+
         return view('User/Gallery/Home', $data);
     }
 

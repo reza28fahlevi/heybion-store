@@ -42,7 +42,7 @@ class ProductsModel extends Model
     protected $beforeFind     = [];
     protected $afterFind      = [];
     protected $beforeDelete   = [];
-    protected $afterDelete    = [];
+    protected $afterDelete    = ['afterDelete'];
 
     protected function beforeAdd(array $data){
         $data['data']['is_deleted'] = false;

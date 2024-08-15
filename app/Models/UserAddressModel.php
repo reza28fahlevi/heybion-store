@@ -6,11 +6,11 @@ use CodeIgniter\Model;
 
 class UserAddressModel extends Model
 {
-    protected $table            = 'useraddresses';
-    protected $primaryKey       = 'id';
+    protected $table            = 'usr_useraddress';
+    protected $primaryKey       = 'uad_id';
     protected $useAutoIncrement = true;
-    protected $returnType       = 'array';
-    protected $useSoftDeletes   = false;
+    protected $returnType       = 'object';
+    protected $useSoftDeletes   = true;
     protected $protectFields    = true;
     protected $allowedFields    = [];
 
@@ -21,7 +21,7 @@ class UserAddressModel extends Model
     protected array $castHandlers = [];
 
     // Dates
-    protected $useTimestamps = false;
+    protected $useTimestamps = true;
     protected $dateFormat    = 'datetime';
     protected $createdField  = 'created_at';
     protected $updatedField  = 'updated_at';
@@ -35,12 +35,37 @@ class UserAddressModel extends Model
 
     // Callbacks
     protected $allowCallbacks = true;
-    protected $beforeInsert   = [];
+    protected $beforeInsert   = ['beforeAdd'];
     protected $afterInsert    = [];
-    protected $beforeUpdate   = [];
+    protected $beforeUpdate   = ['beforeUpdate'];
     protected $afterUpdate    = [];
     protected $beforeFind     = [];
     protected $afterFind      = [];
     protected $beforeDelete   = [];
-    protected $afterDelete    = [];
+    protected $afterDelete    = ['afterDelete'];
+
+    protected function beforeAdd(array $data){
+        $data['data']['is_deleted'] = false;
+        $data['data']['created_by'] = session()->get('username_admin');
+        return $data;
+    }
+
+    protected function beforeUpdate(array $data){
+        $data['data']['updated_by'] = session()->get('username_admin');
+        return $data;
+    }
+
+    // Callback method after delete
+    protected function afterDelete(array $data)
+    {
+        // Perform the update after soft delete
+        $db = \Config\Database::connect();
+        $builder = $db->table($this->table);
+        $builder->where($this->primaryKey, $data['id'][0]); // Where clause to select the deleted row
+        $builder->update([
+            'is_deleted' => true,
+            'deleted_at' => date('Y-m-d H:i:s'),
+            'deleted_by' => session()->get('username_admin'),
+        ]);
+    }
 }

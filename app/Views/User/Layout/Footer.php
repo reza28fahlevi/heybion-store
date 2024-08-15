@@ -36,6 +36,24 @@
       if (!string) return string; // Handle empty strings
       return string.charAt(0).toUpperCase() + string.slice(1);
   }
+  $(document).ready(function(){
+    $('.btn-logout').on("click", function() {
+      Swal.fire({
+        title: "",
+        text: "Are you sure want to sign out?",
+        icon: "question",
+        showCancelButton: true,
+        confirmButtonColor: "#8f160d",
+        cancelButtonColor: "#3d3d3d",
+        confirmButtonText: "Sign Out"
+      }).then((result) => {
+        if (result.isConfirmed){
+          window.location.href = '<?= site_url('logout') ?>';
+        }
+      });
+    })
+  })
+    
 </script>
 </body>
 

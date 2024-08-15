@@ -22,7 +22,7 @@ class Transactions extends BaseController
 
     private function checkLogin(){
         $session = session();
-        if (!$session->get('logged_in')) {
+        if (!$session->get('logged')) {
             return false;
         }else{
             return true;

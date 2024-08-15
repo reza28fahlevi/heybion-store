@@ -11,7 +11,11 @@ $routes->get('product/(:any)', 'User\Home::product/$1');
 $routes->get('getproduct/(:any)', 'User\Home::getproduct/$1');
 $routes->post('addcart', 'User\Transactions::addcart');
 
+$routes->get('login', 'User\Login::index');
 $routes->post('login', 'User\Login::login');
+$routes->get('logout', 'User\Login::logout');
+$routes->get('register', 'User\Register::index');
+$routes->post('register', 'User\Register::createAccount');
 
 // $routes->get('/hb-admin', 'Admin\Home::index');
 $routes->group('hb-admin', static function ($routes) {

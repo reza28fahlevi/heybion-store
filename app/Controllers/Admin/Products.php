@@ -108,24 +108,6 @@ class Products extends BaseController
             }
         }
 
-        $imgpath = WRITEPATH . 'uploads/images';
-        $imgName = "";
-        if (!file_exists($imgpath)) {
-            // Try to create the directory
-            if (mkdir($imgpath, 0777, true)) {
-                //
-            } else {
-                $error = "Failed to create directory.";
-            }
-        } 
-        if (file_exists($imgpath)) {
-            if ($this->request->getFile('thumbnail')->isValid()) {
-                $img = $this->request->getFile('thumbnail');
-                $imgName = $img->getRandomName();
-                $img->move(WRITEPATH . 'uploads/images', $imgName);
-            }
-        }
-
         // Prepare data for insertion
         $data = [
             'product_name' => $product_name,
@@ -142,14 +124,6 @@ class Products extends BaseController
         // Insert data into the database
         $insert = $this->model->insert($data);
         if ($insert) {
-            // Prepare data for insertion
-            $dataGallery = [
-                'product_id' => $insert,
-                'path' => $imgName,
-            ];
-
-            $insertGallery = $this->modelGallery->insert($dataGallery);
-
             return $this->response->setJSON([
                 'status' => 'success',
                 'error' => $error,
