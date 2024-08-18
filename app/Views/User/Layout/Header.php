@@ -48,7 +48,7 @@
   <header id="header" class="header d-flex align-items-center sticky-top">
     <div class="container-fluid position-relative d-flex align-items-center justify-content-between">
 
-      <a href="index.html" class="logo d-flex align-items-center me-auto me-xl-0">
+      <a href="<?= site_url() ?>" class="logo d-flex align-items-center me-auto me-xl-0">
         <!-- Uncomment the line below if you also wish to use an image logo -->
         <!-- <img src="<?= site_url() ?>assets_user/img/logo.png" alt=""> -->
         <h1 class="sitename">HeyBion</h1>
