@@ -8,8 +8,17 @@ use CodeIgniter\Router\RouteCollection;
 $routes->get('/', 'User\Home::index');
 $routes->get('uploads/(:any)/(:any)', 'Files::view/$1/$2');
 $routes->get('product/(:any)', 'User\Home::product/$1');
-$routes->get('getproduct/(:any)', 'User\Home::getproduct/$1');
-$routes->post('addcart', 'User\Transactions::addcart');
+$routes->get('getproduct/(:any)', 'User\Home::getProduct/$1');
+
+$routes->get('mycart', 'User\Transactions::myCart');
+$routes->post('addcart', 'User\Transactions::addCart');
+$routes->post('removecart', 'User\Transactions::removeFromCart');
+
+$routes->post('createinvoice', 'User\Transactions::createInvoice');
+$routes->post('paybill', 'User\Transactions::payBill');
+
+$routes->get('getaddress', 'User\Transactions::getAddress');
+$routes->post('updateaddress', 'User\Transactions::updateAddress');
 
 $routes->get('login', 'User\Login::index');
 $routes->post('login', 'User\Login::login');

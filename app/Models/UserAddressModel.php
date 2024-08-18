@@ -12,7 +12,7 @@ class UserAddressModel extends Model
     protected $returnType       = 'object';
     protected $useSoftDeletes   = true;
     protected $protectFields    = true;
-    protected $allowedFields    = [];
+    protected $allowedFields    = ['user_id','recipient_name','address','pos_code','city','province','country','phone_number','created_by','updated_by','deleted_by','is_deleted'];
 
     protected bool $allowEmptyInserts = false;
     protected bool $updateOnlyChanged = true;
@@ -46,12 +46,12 @@ class UserAddressModel extends Model
 
     protected function beforeAdd(array $data){
         $data['data']['is_deleted'] = false;
-        $data['data']['created_by'] = session()->get('username_admin');
+        $data['data']['created_by'] = session()->get('username');
         return $data;
     }
 
     protected function beforeUpdate(array $data){
-        $data['data']['updated_by'] = session()->get('username_admin');
+        $data['data']['updated_by'] = session()->get('username');
         return $data;
     }
 
@@ -65,7 +65,7 @@ class UserAddressModel extends Model
         $builder->update([
             'is_deleted' => true,
             'deleted_at' => date('Y-m-d H:i:s'),
-            'deleted_by' => session()->get('username_admin'),
+            'deleted_by' => session()->get('username'),
         ]);
     }
 }

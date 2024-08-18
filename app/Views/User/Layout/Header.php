@@ -57,10 +57,10 @@
 
       <nav id="navmenu" class="navmenu">
         <ul>
-          <li><a href="<?= site_url() ?>" class="active"><i class="bi bi-bag mx-1"></i> Shop</a></li>
-          <li><a href="<?= site_url('mycart') ?>"><i class="bi bi-lg bi-basket mx-1"></i> Cart</a></li>
+          <li><a href="<?= site_url() ?>" class="<?= ($menu == "Shop") ? 'active' : '' ?>"><i class="bi bi-bag mx-1"></i> Shop</a></li>
+          <li><a href="<?= site_url('mycart') ?>" class="<?= ($menu == "Cart") ? 'active' : '' ?>"><i class="bi bi-lg bi-basket mx-1"></i> Cart</a></li>
           
-          <li><a href="<?= site_url('mytransaction') ?>"><i class="bi bi-list mx-1"></i> Transaction</a></li>
+          <li><a href="<?= site_url('mytransaction') ?>" class="<?= ($menu == "Transaction") ? 'active' : '' ?>"><i class="bi bi-list mx-1"></i> Transaction</a></li>
         </ul>
         <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
       </nav>

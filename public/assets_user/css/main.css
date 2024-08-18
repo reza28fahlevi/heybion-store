@@ -22,8 +22,10 @@
   --background-color: #f4f4f4;
   --default-color: #3d3d3d;
   --default-btn-color: #f4f4f4;
+  --default-btn-color-secondary: #f4f4f4;
   --heading-color: #000000;
   --accent-color: #8f160d;
+  --accent-secondary: #3d3d3d;
   --surface-color: #ffffff;
   --contrast-color: #000000;
   /* --background-color: #000000; Background color for the entire website, including individual sections */
@@ -750,6 +752,47 @@ section,
 }
 
 /*--------------------------------------------------------------
+# Global Button
+--------------------------------------------------------------*/
+.btn-default {
+  color: var(--default-btn-color);
+  background: var(--accent-color);
+  font-weight: 400;
+  font-size: 14px;
+  display: inline-block;
+  margin-top: 20px;
+  padding: 7px 20px;
+  border: 0;
+  border-radius: 4px;
+  transition: 0.5s;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.btn-default:hover {
+  background-color: color-mix(in srgb, var(--accent-color) 90%, white 10%);
+}
+
+.btn-default-secondary {
+  color: var(--default-btn-color-secondary);
+  background: var(--accent-secondary);
+  font-weight: 400;
+  font-size: 14px;
+  display: inline-block;
+  margin-top: 20px;
+  padding: 7px 20px;
+  border: 0;
+  border-radius: 4px;
+  transition: 0.5s;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.btn-default-secondary:hover {
+  background-color: color-mix(in srgb, var(--accent-secondary) 90%, white 10%);
+}
+
+/*--------------------------------------------------------------
 # Global Section Titles
 --------------------------------------------------------------*/
 .section-title {
@@ -1315,6 +1358,16 @@ section,
   color: var(--accent-color);
 }
 
+.address-detail {
+  width: 100%;
+  height: 100%;
+}
+
+.address-detail h4 {
+  margin: 0;
+  font-size: 18px;
+  color: var(--accent-color);
+}
 /*--------------------------------------------------------------
 # Contact Section
 --------------------------------------------------------------*/
@@ -1442,4 +1495,34 @@ section,
 --------------------------------------------------------------*/
 .starter-section {
   /* Add your styles here */
+}
+
+.form-input input[type=text],
+.form-input input[type=password],
+.form-input input[type=email],
+.form-input input[type=file],
+.form-input textarea {
+  font-size: 14px;
+  padding: 10px 15px;
+  box-shadow: none;
+  border-radius: 0;
+  color: var(--default-color);
+  background-color: var(--surface-color);
+  border-color: color-mix(in srgb, var(--default-color), transparent 80%);
+}
+
+.form-input input[type=text]:focus,
+.form-input input[type=password]:focus,
+.form-input input[type=email]:focus,
+.form-input input[type=file]:focus,
+.form-input textarea:focus {
+  border-color: var(--accent-color);
+}
+
+.form-input input[type=text]::placeholder,
+.form-input input[type=password]::placeholder,
+.form-input input[type=email]::placeholder,
+.form-input input[type=file]::placeholder,
+.form-input textarea::placeholder {
+  color: color-mix(in srgb, var(--default-color), transparent 70%);
 }

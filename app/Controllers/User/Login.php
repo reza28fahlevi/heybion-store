@@ -51,6 +51,7 @@ class Login extends BaseController
             if (hash_equals($user->password, crypt($password, $user->password))) {
                 // pre($user,1);
                 $session->set([
+                    // 'uid' => $user->user_id,
                     'name' => $user->name,
                     'username' => $user->username,
                     'logged' => true,
@@ -68,6 +69,7 @@ class Login extends BaseController
     public function logout()
     {
         $data = [
+            // 'uid' => NULL,
             'name' => NULL,
             'username' => NULL,
             'logged' => false,

@@ -6,13 +6,13 @@ use CodeIgniter\Model;
 
 class CartModel extends Model
 {
-    protected $table            = 'carts';
-    protected $primaryKey       = 'id';
+    protected $table            = 'usr_cart';
+    protected $primaryKey       = 'cart_id';
     protected $useAutoIncrement = true;
-    protected $returnType       = 'array';
-    protected $useSoftDeletes   = false;
+    protected $returnType       = 'object';
+    protected $useSoftDeletes   = true;
     protected $protectFields    = true;
-    protected $allowedFields    = [];
+    protected $allowedFields    = ['user_id','product_id','qty','status','created_by','updated_by','deleted_by','is_deleted'];
 
     protected bool $allowEmptyInserts = false;
     protected bool $updateOnlyChanged = true;
@@ -21,7 +21,7 @@ class CartModel extends Model
     protected array $castHandlers = [];
 
     // Dates
-    protected $useTimestamps = false;
+    protected $useTimestamps = true;
     protected $dateFormat    = 'datetime';
     protected $createdField  = 'created_at';
     protected $updatedField  = 'updated_at';
@@ -35,12 +35,49 @@ class CartModel extends Model
 
     // Callbacks
     protected $allowCallbacks = true;
-    protected $beforeInsert   = [];
+    protected $beforeInsert   = ['beforeAdd'];
     protected $afterInsert    = [];
-    protected $beforeUpdate   = [];
+    protected $beforeUpdate   = ['beforeUpdate'];
     protected $afterUpdate    = [];
     protected $beforeFind     = [];
     protected $afterFind      = [];
     protected $beforeDelete   = [];
-    protected $afterDelete    = [];
+    protected $afterDelete    = ['afterDelete'];
+
+    protected function beforeAdd(array $data){
+        $data['data']['is_deleted'] = false;
+        $data['data']['created_by'] = session()->get('username');
+        return $data;
+    }
+
+    protected function beforeUpdate(array $data){
+        $data['data']['updated_by'] = session()->get('username');
+        return $data;
+    }
+
+    // Callback method after delete
+    protected function afterDelete(array $data)
+    {
+        // Perform the update after soft delete
+        $db = \Config\Database::connect();
+        $builder = $db->table($this->table);
+        $builder->where($this->primaryKey, $data['id'][0]); // Where clause to select the deleted row
+        $builder->update([
+            'is_deleted' => true,
+            'deleted_at' => date('Y-m-d H:i:s'),
+            'deleted_by' => session()->get('username'),
+        ]);
+    }
+
+    public function getMyCart($user_id)
+    {
+        $builder = $this->db->table($this->table);
+        $builder->select('cart_id,user_id,usr_cart.product_id,qty,status,product_name,price_tag,thumbnail,description,stock,product_status,max_purchase,min_purchase');
+        $builder->join('prd_products', 'usr_cart.product_id = prd_products.product_id', 'left');
+        $builder->where('usr_cart.user_id', $user_id);
+        $builder->where('status', 1);
+        $builder->where('product_status <>', 2);
+        $builder->where('usr_cart.is_deleted', false);
+        return $builder->get()->getResult();
+    }
 }

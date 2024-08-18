@@ -36,12 +36,11 @@
                             <h4>Rp. <label class="pricexqty"><?= $product->price_tag ?></label></h4>
                         </div>
                         <div class="col-lg-6">
-                            <!-- <input type="number" name="name" class="form-control" placeholder="Your Name" required=""> -->
                             <div class="input-group mb-3">
                                 <div class="input-group-prepend">
                                     <button id="min-qty" class="btn btn-outline-secondary border-0" type="button">-</button>
                                 </div>
-                                <input type="text" id="qty" class="form-control align-center" style="text-align: center;" value="1" aria-describedby="basic-addon1">
+                                <input type="text" id="qty" name="qty" class="form-control align-center" style="text-align: center;" value="1" aria-describedby="basic-addon1">
                                 <div class="input-group-append">
                                     <button id="plus-qty" class="btn btn-outline-secondary border-0" type="button">+</button>
                                 </div>
@@ -150,9 +149,6 @@
         $('#add-cart').on('submit', function(e) {
             e.preventDefault(); // Prevent the default form submission
 
-            var act = $('#stock').val()
-            var id = $('#product_id').val()
-
             $.ajax({
                 url: '<?= site_url('addcart') ?>',
                 type: 'POST',
@@ -161,14 +157,17 @@
                 contentType: false, // Important: Set the content type to false to allow multipart form data
                 success: function(response) {
                     // Handle the response here
-                    Swal.fire({
-                        title: capitalizeFirstLetter(response.status),
-                        text: response.message,
-                        icon: "success"
-                    });
+                    if(response.error == "signin"){
+                        window.location.href = '<?= site_url('login') ?>';
+                    }else{
+                        Swal.fire({
+                            title: capitalizeFirstLetter(response.status),
+                            text: response.message,
+                            icon: "success",
+                            confirmButtonColor: "#8f160d",
+                        });
+                    }
 
-                    $('#product-modal').modal('hide')
-                    tableProduct.ajax.reload(null, false);
                 },
                 error: function(xhr, status, error) {
                     // Handle errors here
