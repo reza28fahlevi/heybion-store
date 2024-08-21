@@ -9,10 +9,13 @@ use App\Models\ProductPicturesModel;
 use App\Models\CartModel;
 use App\Models\UsersModel;
 use App\Models\UserAddressModel;
+use App\Models\InvoicesModel;
+use App\Models\InvoiceDetailsModel;
+use App\Models\InvoiceProductPicturesModel;
 
 class Transactions extends BaseController
 {
-    protected $menu, $menuCart, $modelProduct, $modelGallery, $modelCart, $modelUser, $modelUserAddress;
+    protected $menu, $menuCart, $modelProduct, $modelGallery, $modelCart, $modelUser, $modelUserAddress, $modelInvoices, $modelInvoiceDetail, $modelInvoicePP;
 
     public function __construct()
     {
@@ -24,6 +27,9 @@ class Transactions extends BaseController
         $this->modelCart = new CartModel();
         $this->modelGallery = new ProductPicturesModel();
         $this->modelUserAddress = new UserAddressModel();
+        $this->modelInvoices = new InvoicesModel();
+        $this->modelInvoiceDetail = new InvoiceDetailsModel();
+        $this->modelInvoicePP = new InvoiceProductPicturesModel();
     }
 
     private function checkLogin(){
@@ -225,13 +231,74 @@ class Transactions extends BaseController
         }
 
         $user = $this->modelUser->where('username', session()->get('username'))->first();
-        $cart = $this->modelCart->getMyCart($user->user_id);
+        $carts = $this->modelCart->getMyCart($user->user_id);
+        $totalbill = 0;
+        foreach($carts as $c){
+            $totalbill += $c->price_tag*$c->qty;
+        }
 
         $randomNumber = rand(0, 9999);
-
         $invoicenumber = "INV-".date('YmdHis').str_pad($randomNumber, 4, '0', STR_PAD_LEFT);
 
-        pre($invoicenumber,1);
+        $dataInvoice = [
+            'invoice_number' => $invoicenumber,
+            'total_invoice' => $totalbill,
+            'payment_method' => 1,
+            'payment_status' => 1,
+            'user_id' => $user->user_id,
+        ];
+
+        // Load the database or model
+        $db = \Config\Database::connect();
+        // Start the transaction
+        $db->transStart();
+
+        try {
+            $insertInvoice = $this->modelInvoices->insert($dataInvoice);
+
+            if($insertInvoice){
+                $this->modelCart->updateMyCart($user->user_id);
+                $datadetail = [];
+                foreach($carts as $cart){
+                    $datadetail = [
+                        'transaction_id' => $insertInvoice,
+                        'product_id' => $cart->product_id,
+                        'product_name' => $cart->product_name,
+                        'price_tag' => $cart->price_tag,
+                        'thumbnail' => $cart->thumbnail,
+                        'description' => $cart->description,
+                    ];
+                    $insertDetail = $this->modelInvoiceDetail->insert($datadetail);
+    
+                    $galleries = $this->modelGallery->where('product_id',$cart->product_id)->findAll();
+                    $dataIPP = [];
+                    foreach($galleries as $gallery){
+                        if($gallery->path){
+                            // $dataIPP
+                            $insertIPP = $this->modelInvoicePP->insert($dataIPP);
+                        }
+                    }
+                }
+
+            }
+            
+            // Check if the transaction was successful
+            if ($db->transStatus() === FALSE) {
+                // Something went wrong, so rollback
+                $db->transRollback();
+                return $this->response->setJSON(['status' => 'error', 'message' => 'Cannot do this action, something wrong!']);
+            } else {
+                // Everything is good, so commit
+                $db->transCommit();
+                return $this->response->setJSON(['status' => 'success', 'message' => 'Invoice successfully created', 'tid' => $insertInvoice]);
+            }
+        } catch (\Exception $e) {
+            // If an exception occurs, rollback the transaction
+            $db->transRollback();
+            return $this->response->setJSON(['status' => 'error', 'message' => 'Cannot do this action, something wrong!']);
+        }
+
+        // pre($totalbill,1);
     }
 
     public function payBill()
@@ -246,5 +313,143 @@ class Transactions extends BaseController
             ]);
         }
 
+        $transaction_id = htmlspecialchars((string)$this->request->getPost('tid'),ENT_QUOTES);
+
+        $path = WRITEPATH . 'uploads/payment_bill';
+        $picName = "";
+        if (!file_exists($path)) {
+            // Try to create the directory
+            if (mkdir($path, 0777, true)) {
+                //
+            } else {
+                $error = "Failed to create directory.";
+            }
+        } 
+        if (file_exists($path)) {
+            if ($this->request->getFile('upload_bill')->isValid()) {
+                $pic = $this->request->getFile('upload_bill');
+                $picName = $pic->getRandomName();
+                $pic->move(WRITEPATH . 'uploads/payment_bill', $picName);
+            }
+        }
+
+        $data = [
+            'payment_proof' => $picName,
+            'payment_status' => 2,
+        ];
+        $update = $this->modelInvoices->update($transaction_id, $data);
+
+        if($update){
+            return $this->response->setJSON(['status' => 'success', 'message' => 'Bill successfully uploaded']);
+        }else{
+            return $this->response->setJSON(['status' => 'error', 'message' => 'Cannot do this action, something wrong!']);
+        }
+    }
+
+    public function myHistory()
+    {
+        $error = "";
+        if (!$this->checkLogin()) {
+            return redirect()->to('login');
+        }
+        $user = $this->modelUser->where('username', session()->get('username'))->first();
+        $userAddress = $this->modelUserAddress->where('user_id', $user->user_id)->first();
+
+        $mytransaction = $this->modelInvoices->where('user_id',$user->user_id)->orderBy('invoice_number', 'DESC')->findAll();
+        if($mytransaction){
+            foreach($mytransaction as $key => $value){
+                $mytransaction[$key]->details = $this->modelInvoiceDetail->where('transaction_id',$value->transaction_id)->orderBy('trd_id', 'ASC')->findAll();
+                $badge = '';
+                $btn_pay = '';
+                if($value->payment_status == 1){
+                    $badge = '<span class="badge bg-secondary"><i class="bi bi-clock-fill me-1"></i> Waiting for payment</span>';
+                    $btn_pay = '<button type="button" class="btn-default btn-paybill form-control" data-trd="<?= $invoice->transaction_id ?>"> <i class="bi bi-upload"></i> Pay</button>';
+                }elseif($value->payment_status == 2){
+                    $badge = '<span class="badge bg-dark"><i class="bi bi-hourglass-split me-1"></i> Waiting for confirmation</span>';
+                }elseif ($value->payment_status == 3) {
+                    $badge = '<span class="badge bg-warning"><i class="bi bi-box-seam me-1"></i> Processed</span>';
+                }elseif ($value->payment_status == 4) {
+                    $badge = '<span class="badge bg-info"><i class="bi bi-truck me-1"></i> Shipping</span>';
+                }else{
+                    $badge = '<span class="badge bg-success"><i class="bi bi-patch-check me-1"></i> Finished</span>';
+                }
+                $mytransaction[$key]->badge_status = $badge;
+                $mytransaction[$key]->btnPay = $btn_pay;
+            }
+        }
+        // pre($mytransaction);
+        $data = [
+            "menu" => $this->menu,
+            "mytransaction" => $mytransaction,
+        ];
+
+        // pre($data,1);
+        return view('User/Transactions/Transactions_List', $data);
+    }
+
+    public function getDetailInvoice($id)
+    {
+        $error = "";
+        
+        if (!$this->checkLogin()) {
+            $error = "signin";
+            return $this->response->setJSON([
+                'status' => 'success',
+                'error' => $error,
+                'message' => "Login First",
+            ]);
+        }
+
+        $user = $this->modelUser->where('username', session()->get('username'))->first();
+        $userAddress = $this->modelUserAddress->where('user_id', $user->user_id)->first();
+
+        $invoice = $this->modelInvoices->find($id);
+        $invoiceDetails = $this->modelInvoiceDetail->where('transaction_id', $id)->orderBy('trd_id', 'ASC')->findAll();
+        
+        $badge = '';
+        if($invoice){
+            if($invoice->payment_status == 1){
+                $badge = '<span class="badge bg-secondary"><i class="bi bi-clock-fill me-1"></i> Waiting for payment</span>';
+                $btn_pay = '<button type="button" class="btn-default btn-paybill form-control" data-trd="<?= $invoice->transaction_id ?>"> <i class="bi bi-upload"></i> Pay</button>';
+            }elseif($invoice->payment_status == 2){
+                $badge = '<span class="badge bg-dark"><i class="bi bi-hourglass-split me-1"></i> Waiting for confirmation</span>';
+            }elseif ($invoice->payment_status == 3) {
+                $badge = '<span class="badge bg-warning"><i class="bi bi-box-seam me-1"></i> Processed</span>';
+            }elseif ($invoice->payment_status == 4) {
+                $badge = '<span class="badge bg-info"><i class="bi bi-truck me-1"></i> Shipping</span>';
+            }else{
+                $badge = '<span class="badge bg-success"><i class="bi bi-patch-check me-1"></i> Finished</span>';
+            }
+        }
+        $invoice->badge_status = $badge;
+
+        $listProducts = '';
+        foreach($invoiceDetails as $detail){
+            $listProducts .= '
+            <div class="row gy-4 mb-1 justify-content-center">
+                <div class="col-lg-2">
+                    <a href="'.site_url('product/'.$detail->product_id).'"><img src="'.site_url('uploads/thumbnails/'.$detail->thumbnail).'" class="img-fluid img-thumbnail " alt=""></a>
+                </div>
+                <div class="col-lg-10 content pricing">
+                    <h6><a href="'.site_url('product/'.$detail->product_id).'">'.$detail->product_name.'</a></h6>
+                    <ul>
+                        <li class="pricing-item d-flex justify-content-between"><h4 style="font-size: 15px;"><i class="bi bi-chevron-right"></i> Rp. <label class="item-pricing">'.$detail->price_tag.'</label></h4><h4>x1</h4></li>
+                    </ul>
+                </div>
+            </div>';
+        }
+
+        $data = [
+            "userDetail" => $userAddress,
+            "invoice" => $invoice,
+            "invoiceDetails" => $invoiceDetails,
+            "listProducts" => $listProducts
+        ];
+
+        if($invoice){
+            return $this->response->setJSON(['status' => 'success', 'data' => $data, 'message' => 'Success get data']);
+        }else{
+            return $this->response->setJSON(['status' => 'error', 'message' => 'Cannot do this action, something wrong!']);
+        }
     }
 }

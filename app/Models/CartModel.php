@@ -80,4 +80,14 @@ class CartModel extends Model
         $builder->where('usr_cart.is_deleted', false);
         return $builder->get()->getResult();
     }
+
+    public function updateMyCart($user_id)
+    {
+        $builder = $this->db->table($this->table);
+        $builder->set('status',2);
+        $builder->where('user_id', $user_id);
+        $builder->where('status', 1);
+        $builder->where('is_deleted', false);
+        return $builder->update();
+    }
 }

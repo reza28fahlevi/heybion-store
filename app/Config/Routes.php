@@ -14,6 +14,9 @@ $routes->get('mycart', 'User\Transactions::myCart');
 $routes->post('addcart', 'User\Transactions::addCart');
 $routes->post('removecart', 'User\Transactions::removeFromCart');
 
+$routes->get('mytransaction', 'User\Transactions::myHistory');
+$routes->get('getDetailInvoice/(:any)', 'User\Transactions::getDetailInvoice/$1');
+
 $routes->post('createinvoice', 'User\Transactions::createInvoice');
 $routes->post('paybill', 'User\Transactions::payBill');
 

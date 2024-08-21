@@ -361,6 +361,7 @@
                                 confirmButtonText: "Upload Payment!"
                             }).then((result) => {
                                 if (result.isConfirmed) {
+                                    $("#tid").val(response.tid)
                                     $("#payment-modal").modal('show')
                                 }
                             });
@@ -373,6 +374,44 @@
                                 icon: "error"
                             });
                         }
+                    });
+                }
+            });
+        })
+
+        $('#f_payment').on('submit', function(e) {
+            e.preventDefault(); // Prevent the default form submission
+
+            $.ajax({
+                url: '<?= site_url('paybill') ?>',
+                type: 'POST',
+                data: new FormData(this),
+                processData: false, // Important: Prevent jQuery from automatically transforming the data into a query string
+                contentType: false, // Important: Set the content type to false to allow multipart form data
+                success: function(response) {
+                    // Handle the response here
+                    if(response.error == "signin"){
+                        window.location.href = '<?= site_url('login') ?>';
+                    }else{
+                        Swal.fire({
+                            title: capitalizeFirstLetter(response.status),
+                            text: response.message,
+                            icon: "success",
+                            confirmButtonColor: "#8f160d",
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                window.location.href = '<?= site_url('mytransaction') ?>';
+                            }
+                        });
+
+                    }
+                },
+                error: function(xhr, status, error) {
+                    // Handle errors here
+                    Swal.fire({
+                        title: "Error",
+                        text: "Can't perform this action! Something wrong.",
+                        icon: "error"
                     });
                 }
             });

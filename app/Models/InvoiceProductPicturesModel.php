@@ -6,13 +6,13 @@ use CodeIgniter\Model;
 
 class InvoiceProductPicturesModel extends Model
 {
-    protected $table            = 'invoiceproductpictures';
-    protected $primaryKey       = 'id';
+    protected $table            = 'trt_invoiceproductpictures';
+    protected $primaryKey       = 'ipp_id';
     protected $useAutoIncrement = true;
-    protected $returnType       = 'array';
-    protected $useSoftDeletes   = false;
+    protected $returnType       = 'object';
+    protected $useSoftDeletes   = true;
     protected $protectFields    = true;
-    protected $allowedFields    = [];
+    protected $allowedFields    = ['transaction_id', 'product_id', 'path', 'created_by', 'updated_by', 'deleted_by', 'is_deleted'];
 
     protected bool $allowEmptyInserts = false;
     protected bool $updateOnlyChanged = true;
@@ -21,7 +21,7 @@ class InvoiceProductPicturesModel extends Model
     protected array $castHandlers = [];
 
     // Dates
-    protected $useTimestamps = false;
+    protected $useTimestamps = true;
     protected $dateFormat    = 'datetime';
     protected $createdField  = 'created_at';
     protected $updatedField  = 'updated_at';
@@ -35,12 +35,37 @@ class InvoiceProductPicturesModel extends Model
 
     // Callbacks
     protected $allowCallbacks = true;
-    protected $beforeInsert   = [];
+    protected $beforeInsert   = ['beforeAdd'];
     protected $afterInsert    = [];
-    protected $beforeUpdate   = [];
+    protected $beforeUpdate   = ['beforeUpdate'];
     protected $afterUpdate    = [];
     protected $beforeFind     = [];
     protected $afterFind      = [];
     protected $beforeDelete   = [];
-    protected $afterDelete    = [];
+    protected $afterDelete    = ['afterDelete'];
+
+    protected function beforeAdd(array $data){
+        $data['data']['is_deleted'] = false;
+        $data['data']['created_by'] = session()->get('username');
+        return $data;
+    }
+
+    protected function beforeUpdate(array $data){
+        $data['data']['updated_by'] = session()->get('username');
+        return $data;
+    }
+
+    // Callback method after delete
+    protected function afterDelete(array $data)
+    {
+        // Perform the update after soft delete
+        $db = \Config\Database::connect();
+        $builder = $db->table($this->table);
+        $builder->where($this->primaryKey, $data['id'][0]); // Where clause to select the deleted row
+        $builder->update([
+            'is_deleted' => true,
+            'deleted_at' => date('Y-m-d H:i:s'),
+            'deleted_by' => session()->get('username'),
+        ]);
+    }
 }
