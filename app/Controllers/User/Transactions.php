@@ -267,6 +267,7 @@ class Transactions extends BaseController
                         'price_tag' => $cart->price_tag,
                         'thumbnail' => $cart->thumbnail,
                         'description' => $cart->description,
+                        'qty' => $cart->qty,
                     ];
                     $insertDetail = $this->modelInvoiceDetail->insert($datadetail);
     
@@ -433,7 +434,7 @@ class Transactions extends BaseController
                 <div class="col-lg-10 content pricing">
                     <h6><a href="'.site_url('product/'.$detail->product_id).'">'.$detail->product_name.'</a></h6>
                     <ul>
-                        <li class="pricing-item d-flex justify-content-between"><h4 style="font-size: 15px;"><i class="bi bi-chevron-right"></i> Rp. <label class="item-pricing">'.$detail->price_tag.'</label></h4><h4>x1</h4></li>
+                        <li class="pricing-item d-flex justify-content-between"><h4 style="font-size: 15px;"><i class="bi bi-chevron-right"></i> Rp. <label class="item-pricing">'.$detail->price_tag.'</label></h4><h4>x'.$detail->qty.'</h4></li>
                     </ul>
                 </div>
             </div>';

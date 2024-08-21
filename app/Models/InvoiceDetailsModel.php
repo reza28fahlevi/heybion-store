@@ -12,7 +12,7 @@ class InvoiceDetailsModel extends Model
     protected $returnType       = 'object';
     protected $useSoftDeletes   = true;
     protected $protectFields    = true;
-    protected $allowedFields    = ['transaction_id', 'product_id', 'product_name', 'price_tag', 'thumbnail', 'description', 'created_by', 'updated_by', 'deleted_by', 'is_deleted'];
+    protected $allowedFields    = ['transaction_id', 'product_id', 'product_name', 'price_tag', 'thumbnail', 'description', 'created_by', 'updated_by', 'deleted_by', 'is_deleted','qty'];
 
     protected bool $allowEmptyInserts = false;
     protected bool $updateOnlyChanged = true;
