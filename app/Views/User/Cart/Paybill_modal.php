@@ -18,7 +18,7 @@
                         <label for="inputText" class="col-sm-2 col-form-label">Upload Transfer Billing</label>
                         <div class="col-sm-10">
                         <input type="hidden" name="tid" id="tid" value="">
-                        <input type="file" class="form-control" id="upload_bill" name="upload_bill" value="" required>
+                        <input type="file" class="form-control" id="upload_bill" name="upload_bill" accept=".jpg, .jpeg, .png" value="" required>
                         </div>
                     </div>
                 </div>

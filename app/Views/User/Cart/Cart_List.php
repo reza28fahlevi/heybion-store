@@ -69,6 +69,9 @@
         }
         ?>
 
+        <?php
+        if($mycart){
+        ?>
         <div class="row gy-4 mx-5 my-2 justify-content-center">
           <div class="col-lg-8 content pricing">
             <h6><strong>Total Bill:</strong></h6>
@@ -82,6 +85,7 @@
             <button type="button" class="btn-default btn-checkout">Pay Bill <i class="bi bi-credit-card-fill"></i></button>
           </div>
         </div>
+        <?php } ?>
 
       </div>
 

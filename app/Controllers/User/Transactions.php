@@ -364,7 +364,7 @@ class Transactions extends BaseController
                 $btn_pay = '';
                 if($value->payment_status == 1){
                     $badge = '<span class="badge bg-secondary"><i class="bi bi-clock-fill me-1"></i> Waiting for payment</span>';
-                    $btn_pay = '<button type="button" class="btn-default btn-paybill form-control" data-trd="<?= $invoice->transaction_id ?>"> <i class="bi bi-upload"></i> Pay</button>';
+                    $btn_pay = '<button type="button" class="btn-default btn-paybill form-control" data-trd="'.$value->transaction_id.'"> <i class="bi bi-upload"></i> Pay</button>';
                 }elseif($value->payment_status == 2){
                     $badge = '<span class="badge bg-dark"><i class="bi bi-hourglass-split me-1"></i> Waiting for confirmation</span>';
                 }elseif ($value->payment_status == 3) {
