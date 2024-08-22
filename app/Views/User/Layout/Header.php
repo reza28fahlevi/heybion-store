@@ -12,8 +12,8 @@
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9.17.2/dist/sweetalert2.min.js"></script>
   <script src="https://cdn.datatables.net/2.1.2/js/dataTables.js"></script>
   <!-- Favicons -->
-  <link href="<?= site_url() ?>assets_user/img/favicon.png" rel="icon">
-  <link href="<?= site_url() ?>assets_user/img/apple-touch-icon.png" rel="apple-touch-icon">
+  <link href="<?=site_url()?>assets/img/favicon.png" rel="icon">
+  <link href="<?=site_url()?>assets/img/apple-touch-icon.png" rel="apple-touch-icon">
 
   <!-- Fonts -->
   <link href="https://fonts.googleapis.com" rel="preconnect">

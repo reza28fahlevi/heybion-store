@@ -37,6 +37,13 @@ $routes->group('hb-admin', static function ($routes) {
     $routes->post('login', 'Admin\Login::login');
     $routes->get('sign_out', 'Admin\Login::logout');
 
+    $routes->get('need_confirmation', 'Admin\Transactions::needConfirm');
+    $routes->get('waiting_delivery', 'Admin\Transactions::needDelivery');
+    $routes->get('all_transactions', 'Admin\Transactions::allTransactions');
+    $routes->post('transactions/getlist/(:any)', 'Admin\Transactions::getListTransactions/$1');
+    $routes->get('transactions/getdetail/(:any)', 'Admin\Transactions::getDetailInvoice/$1');
+    $routes->post('transactions/submit', 'Admin\Transactions::submit');
+
     $routes->get('products', 'Admin\Products::index');
     $routes->post('products/fetch', 'Admin\Products::fetch');
     $routes->post('products/add', 'Admin\Products::add');
