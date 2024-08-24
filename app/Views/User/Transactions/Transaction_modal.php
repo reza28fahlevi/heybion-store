@@ -12,6 +12,7 @@
                             <ul>
                                 <li class="address-detail mb-0"> <h4 class="recipient-detail"><strong>Shipping Address :</strong> recipient | phone number </h4></li>
                                 <li class="pricing-item mt-0"> <h4 class="recipient-address"> address </h4></li>
+                                <li class="pricing-item mt-0" style="display:none"> <h4 class="detail-shipping"> </h4></li>
                             </ul>
                         </div>
                     </div>

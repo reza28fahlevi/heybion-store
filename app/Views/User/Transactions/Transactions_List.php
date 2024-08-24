@@ -23,7 +23,7 @@
         ?>        
         <div class="row gy-4 mx-5 my-2 justify-content-center transaction-<?= $invoice->transaction_id ?>">
           <div class="col-lg-2">
-            <a href="<?= site_url('transactiondetail/') . $invoice->transaction_id ?>"><img src="<?= (isset($invoice->details[0]->thumbnail)) ? site_url('uploads/thumbnails/').$invoice->details[0]->thumbnail : site_url('uploads/thumbnails/') ?>" class="img-fluid img-thumbnail " alt=""></a>
+            <img src="<?= (isset($invoice->details[0]->thumbnail)) ? site_url('uploads/thumbnails/').$invoice->details[0]->thumbnail : site_url('uploads/thumbnails/') ?>" class="img-fluid img-thumbnail " alt="">
           </div>
           <div class="col-lg-7 content pricing">
             <h6><a href="<?= site_url('transactiondetail/') . $invoice->transaction_id ?>"><?= $invoice->invoice_number ?></a> <?= $invoice->badge_status ?></h6>
@@ -112,6 +112,12 @@
                     $('.recipient-address').html(response.data.userDetail.address + ', ' + response.data.userDetail.pos_code + ', ' + response.data.userDetail.city + ', ' + response.data.userDetail.province + ', ' + response.data.userDetail.country)
                     $('.products-list').html(response.data.listProducts)
                     $('.total-price').html('Rp. ' + response.data.invoice.total_invoice)
+                    if(response.data.invoice.receipt_number){
+                        $('.detail-shipping').parent().show()
+                        $('.detail-shipping').html(response.data.invoice.delivery_service + ' - ' + response.data.invoice.receipt_number)
+                    }else{
+                        $('.detail-shipping').parent().hide()
+                    }
                     $('#transaction-modal').modal('show')
                 },
                 error: function(xhr, status, error) {
