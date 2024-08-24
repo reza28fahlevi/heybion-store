@@ -87,7 +87,7 @@ class Products extends BaseController
         $stock = htmlspecialchars((string)$this->request->getPost('stock'),ENT_QUOTES);
         $min_purchase = htmlspecialchars((string)$this->request->getPost('min_purchase'),ENT_QUOTES);
         $max_purchase = htmlspecialchars((string)$this->request->getPost('max_purchase'),ENT_QUOTES);
-        $description = htmlspecialchars((string)$this->request->getPost('description'),ENT_QUOTES);
+        $description = $this->request->getPost('description');
         $product_status = htmlspecialchars((string)$this->request->getPost('product_status'),ENT_QUOTES);
 
         $path = WRITEPATH . 'uploads/thumbnails';
@@ -171,7 +171,7 @@ class Products extends BaseController
         $stock = htmlspecialchars((string)$this->request->getPost('stock'),ENT_QUOTES);
         $min_purchase = htmlspecialchars((string)$this->request->getPost('min_purchase'),ENT_QUOTES);
         $max_purchase = htmlspecialchars((string)$this->request->getPost('max_purchase'),ENT_QUOTES);
-        $description = htmlspecialchars((string)$this->request->getPost('description'),ENT_QUOTES);
+        $description = $this->request->getPost('description');
         $product_status = htmlspecialchars((string)$this->request->getPost('product_status'),ENT_QUOTES);
       
 

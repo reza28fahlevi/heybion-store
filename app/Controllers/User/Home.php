@@ -18,7 +18,7 @@ class Home extends BaseController
 
     public function index()
     {
-        $productList = $this->productModel->findAll();
+        $productList = $this->productModel->orderBy('product_id','asc')->findAll();
         $data = [
             "menu" => $this->menu,
             "products" => $productList,
