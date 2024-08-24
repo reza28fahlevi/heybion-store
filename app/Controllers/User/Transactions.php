@@ -360,21 +360,11 @@ class Transactions extends BaseController
         if($mytransaction){
             foreach($mytransaction as $key => $value){
                 $mytransaction[$key]->details = $this->modelInvoiceDetail->where('transaction_id',$value->transaction_id)->orderBy('trd_id', 'ASC')->findAll();
-                $badge = '';
                 $btn_pay = '';
                 if($value->payment_status == 1){
-                    $badge = '<span class="badge bg-secondary"><i class="bi bi-clock-fill me-1"></i> Waiting for payment</span>';
                     $btn_pay = '<button type="button" class="btn-default btn-paybill form-control" data-trd="'.$value->transaction_id.'"> <i class="bi bi-upload"></i> Pay</button>';
-                }elseif($value->payment_status == 2){
-                    $badge = '<span class="badge bg-dark"><i class="bi bi-hourglass-split me-1"></i> Waiting for confirmation</span>';
-                }elseif ($value->payment_status == 3) {
-                    $badge = '<span class="badge bg-warning"><i class="bi bi-box-seam me-1"></i> Processed</span>';
-                }elseif ($value->payment_status == 4) {
-                    $badge = '<span class="badge bg-info"><i class="bi bi-truck me-1"></i> Shipping</span>';
-                }else{
-                    $badge = '<span class="badge bg-success"><i class="bi bi-patch-check me-1"></i> Finished</span>';
                 }
-                $mytransaction[$key]->badge_status = $badge;
+                $mytransaction[$key]->badge_status = badgeStatus($value->payment_status);
                 $mytransaction[$key]->btnPay = $btn_pay;
             }
         }

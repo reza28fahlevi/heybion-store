@@ -835,6 +835,11 @@ h6 {
   background: #ffecdf;
 }
 
+.dashboard .invoice-card .card-icon {
+  color: #ff1d1d;
+  background: #ffdfdf;
+}
+
 /* Activity */
 .dashboard .activity {
   font-size: 14px;
