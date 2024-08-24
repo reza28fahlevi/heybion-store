@@ -39,18 +39,62 @@ class Register extends BaseController
         return view('User/Register', $data);
     }
 
+    public function checkExisting()
+    {
+        $error = "";
+        
+        $field = htmlspecialchars((string)$this->request->getPost('field'),ENT_QUOTES);
+        $value = htmlspecialchars((string)$this->request->getPost('value'),ENT_QUOTES);
+
+        $dataExist = $this->model->where($field, $value)->findAll();
+        if ($dataExist) {
+            return $this->response->setJSON([
+                'status' => 'error',
+                'error' => $error,
+                'message' => $field." has been registered",
+            ]);
+        } else {
+            return $this->response->setJSON([
+                'status' => 'success',
+                'error' => $error,
+                'message' => $field." is available",
+            ]);
+        }
+    }
+
     public function createAccount()
     {
         $error = "";
         // Get form data
         $name = htmlspecialchars((string)$this->request->getPost('name'),ENT_QUOTES);
+        $email = htmlspecialchars((string)$this->request->getPost('email'),ENT_QUOTES);
         $username = htmlspecialchars((string)$this->request->getPost('username'),ENT_QUOTES);
         $password = htmlspecialchars((string)$this->request->getPost('password'),ENT_QUOTES);
         $salt = bin2hex(random_bytes(22)); // Generate a random salt
         $hashedPassword = crypt($password, $salt); // Hash the password with the salt
+
+        $unameExist = $this->model->where('username', $username)->findAll();
+        if ($unameExist) {
+            return $this->response->setJSON([
+                'status' => 'error',
+                'error' => $error,
+                'focus' => 'username',
+                'message' => "Username is unavailable",
+            ]);
+        }
+        $emailExist = $this->model->where('email', $email)->findAll();
+        if ($emailExist) {
+            return $this->response->setJSON([
+                'status' => 'error',
+                'error' => $error,
+                'focus' => 'email',
+                'message' => "Email has been registered",
+            ]);
+        }
         // Prepare data for insertion
         $data = [
             'name' => $name,
+            'email' => $email,
             'username' => $username,
             'password' => $hashedPassword,
         ];

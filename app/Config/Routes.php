@@ -27,6 +27,7 @@ $routes->get('login', 'User\Login::index');
 $routes->post('login', 'User\Login::login');
 $routes->get('logout', 'User\Login::logout');
 $routes->get('register', 'User\Register::index');
+$routes->post('check', 'User\Register::checkExisting');
 $routes->post('register', 'User\Register::createAccount');
 
 // $routes->get('/hb-admin', 'Admin\Home::index');
