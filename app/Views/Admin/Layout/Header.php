@@ -79,7 +79,7 @@
               <h6><?=session()->get('username_admin')?></h6>
               <span>Administrator</span>
             </li>
-            <li>
+            <!-- <li>
               <hr class="dropdown-divider">
             </li>
 
@@ -88,7 +88,7 @@
                 <i class="bi bi-gear"></i>
                 <span>Account Settings</span>
               </a>
-            </li>
+            </li> -->
             <li>
               <hr class="dropdown-divider">
             </li>
