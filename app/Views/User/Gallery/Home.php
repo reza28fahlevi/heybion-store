@@ -25,6 +25,7 @@
             foreach($products as $product){
                 ?>
                 <div class="col-xl-3 col-lg-4 col-md-6">
+                  <a href="<?= site_url('product/').$product->product_id ?>" >
                     <div class="gallery-item h-100 d-flex align-items-center justify-content-center">
                     <img src="<?= site_url('uploads/thumbnails/') . $product->thumbnail ?>" class="img-fluid my-auto" alt="">
                     <div class="gallery-links">
@@ -32,10 +33,10 @@
                           <span style="color: #f4f4f4" class="mt-5"><?= $product->product_name . "<br>
                           Rp. " . $product->price_tag ?>
                           <?= ($product->product_status == 3) ? '<br> - Pre Order' : '' ?></span><br>
-                          <a href="<?= site_url('product/').$product->product_id ?>" class="details-link"><i class="bi bi-eye"></i></a>
                         </div>
                     </div>
                   </div>
+                  </a>
                 </div><!-- End Gallery Item -->
                 <?php
             }

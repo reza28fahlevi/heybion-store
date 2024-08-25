@@ -70,7 +70,7 @@
           <?php
           if(session()->get('username')){
           ?>
-            <span><a href="#" class="btn-logout"><i class="bi bi-box-arrow-left mx-1" data-toggle="tooltip" data-placement="left" title="Sign Out"></i></a></span>
+          <span><a href="#" class="btn-logout"><i class="bi bi-box-arrow-left mx-1" data-toggle="tooltip" data-placement="left" title="Sign Out"></i></a></span>
           <?php
           }else{
             ?>
