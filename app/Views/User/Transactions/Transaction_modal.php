@@ -27,7 +27,7 @@
                     </div>
                 </div>
             </div>
-            <div class="modal-footer">
+            <div class="modal-footer footer-transaction">
                 <button type="button" class="btn btn-default-secondary" data-bs-dismiss="modal">Close</button>
             </div>
         </div>

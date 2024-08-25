@@ -19,6 +19,7 @@ $routes->get('getDetailInvoice/(:any)', 'User\Transactions::getDetailInvoice/$1'
 
 $routes->post('createinvoice', 'User\Transactions::createInvoice');
 $routes->post('paybill', 'User\Transactions::payBill');
+$routes->post('finishorder', 'User\Transactions::finishOrder');
 
 $routes->get('getaddress', 'User\Transactions::getAddress');
 $routes->post('updateaddress', 'User\Transactions::updateAddress');

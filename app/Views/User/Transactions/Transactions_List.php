@@ -36,6 +36,7 @@
           <div class="col-lg-2">
             <button type="button" class="btn-default btn-details form-control" data-trd="<?= $invoice->transaction_id ?>"> <i class="bi bi-list"></i> Details</button><br>
             <?= $invoice->btnPay ?>
+            <?= $invoice->btnFinish ?>
           </div>
         </div>
         <?php
@@ -118,6 +119,11 @@
                     }else{
                         $('.detail-shipping').parent().hide()
                     }
+                    // if(response.data.invoice.payment_status == 4){
+                    //     $('.footer-transaction').append('<button type="button" class="btn btn-default btn-finish" data-trd="' + response.data.invoice.transaction_id + '">Finish Order</button>')
+                    // }else{
+                    //     $('.btn-finish').remove()
+                    // }
                     $('#transaction-modal').modal('show')
                 },
                 error: function(xhr, status, error) {
@@ -126,6 +132,56 @@
                         title: "Error",
                         text: "Can't perform this action! Something wrong.",
                         icon: "error"
+                    });
+                }
+            });
+        })
+
+        $('.btn-finish').on('click', function() {
+            var id = $(this).data('trd')
+
+            Swal.fire({
+                title: 'Order Received',
+                text: 'Are you sure you want to end this order? Make sure the package has been received',
+                icon: "question",
+                showCancelButton: true,
+                confirmButtonColor: "#8f160d",
+                cancelButtonColor: "#3d3d3d",
+                confirmButtonText: "Finish Order"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: '<?= site_url('finishorder') ?>',
+                        type: 'POST',
+                        data: {
+                            'trd': id
+                        },
+                        success: function(response) {
+                            // Handle the response here
+                            if(response.error == "signin"){
+                                window.location.href = '<?= site_url('login') ?>';
+                            }else{
+                                Swal.fire({
+                                    title: 'Thank You',
+                                    text: response.message,
+                                    icon: "success",
+                                    confirmButtonColor: "#8f160d",
+                                }).then((result) => {
+                                    if (result.isConfirmed) {
+                                        window.location.href = '<?= site_url('mytransaction') ?>';
+                                    }
+                                });
+
+                            }
+                        },
+                        error: function(xhr, status, error) {
+                            // Handle errors here
+                            Swal.fire({
+                                title: "Error",
+                                text: "Can't perform this action! Something wrong.",
+                                icon: "error"
+                            });
+                        }
                     });
                 }
             });

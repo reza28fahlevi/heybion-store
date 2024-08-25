@@ -361,11 +361,16 @@ class Transactions extends BaseController
             foreach($mytransaction as $key => $value){
                 $mytransaction[$key]->details = $this->modelInvoiceDetail->where('transaction_id',$value->transaction_id)->orderBy('trd_id', 'ASC')->findAll();
                 $btn_pay = '';
+                $btn_finish = '';
                 if($value->payment_status == 1){
                     $btn_pay = '<button type="button" class="btn-default btn-paybill form-control" data-trd="'.$value->transaction_id.'"> <i class="bi bi-upload"></i> Pay</button>';
                 }
+                if($value->payment_status == 4){
+                    $btn_finish = '<button type="button" class="btn-default btn-finish form-control" data-trd="'.$value->transaction_id.'"> <i class="bi bi-patch-check"></i> Received</button>';
+                }
                 $mytransaction[$key]->badge_status = badgeStatus($value->payment_status);
                 $mytransaction[$key]->btnPay = $btn_pay;
+                $mytransaction[$key]->btnFinish = $btn_finish;
             }
         }
         // pre($mytransaction);
@@ -397,22 +402,7 @@ class Transactions extends BaseController
         $invoice = $this->modelInvoices->find($id);
         $invoiceDetails = $this->modelInvoiceDetail->where('transaction_id', $id)->orderBy('trd_id', 'ASC')->findAll();
         
-        $badge = '';
-        if($invoice){
-            if($invoice->payment_status == 1){
-                $badge = '<span class="badge bg-secondary"><i class="bi bi-clock-fill me-1"></i> Waiting for payment</span>';
-                $btn_pay = '<button type="button" class="btn-default btn-paybill form-control" data-trd="<?= $invoice->transaction_id ?>"> <i class="bi bi-upload"></i> Pay</button>';
-            }elseif($invoice->payment_status == 2){
-                $badge = '<span class="badge bg-dark"><i class="bi bi-hourglass-split me-1"></i> Waiting for confirmation</span>';
-            }elseif ($invoice->payment_status == 3) {
-                $badge = '<span class="badge bg-warning"><i class="bi bi-box-seam me-1"></i> Processed</span>';
-            }elseif ($invoice->payment_status == 4) {
-                $badge = '<span class="badge bg-info"><i class="bi bi-truck me-1"></i> Shipping</span>';
-            }else{
-                $badge = '<span class="badge bg-success"><i class="bi bi-patch-check me-1"></i> Finished</span>';
-            }
-        }
-        $invoice->badge_status = $badge;
+        $invoice->badge_status = badgeStatus($invoice->payment_status);
 
         $listProducts = '';
         foreach($invoiceDetails as $detail){
@@ -439,6 +429,34 @@ class Transactions extends BaseController
 
         if($invoice){
             return $this->response->setJSON(['status' => 'success', 'data' => $data, 'message' => 'Success get data']);
+        }else{
+            return $this->response->setJSON(['status' => 'error', 'message' => 'Cannot do this action, something wrong!']);
+        }
+    }
+
+    public function finishOrder()
+    {
+        $error = "";
+        if (!$this->checkLogin()) {
+            $error = "signin";
+            return $this->response->setJSON([
+                'status' => 'success',
+                'error' => $error,
+                'message' => "Login First",
+            ]);
+        }
+
+        $transaction_id = htmlspecialchars((string)$this->request->getPost('trd'),ENT_QUOTES);
+
+        $data = [
+            'payment_status' => 5,
+        ];
+
+        // pre($data,1);
+        $update = $this->modelInvoices->update($transaction_id, $data);
+
+        if($update){
+            return $this->response->setJSON(['status' => 'success', 'message' => 'Order Finished!']);
         }else{
             return $this->response->setJSON(['status' => 'error', 'message' => 'Cannot do this action, something wrong!']);
         }
