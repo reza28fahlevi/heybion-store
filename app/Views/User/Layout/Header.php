@@ -66,25 +66,18 @@
       </nav>
 
       <div class="header-social-links">
-        <nav id="navuser" class="navmenu mx-5">
-            <ul>
-                <li class="dropdown"><a href="#"><span><?= (session()->get('username')) ? session()->get('name') : "Guest" ?></span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
-                    <ul>
-                        <?php
-                        if(session()->get('username')){
-                        ?>
-                          <li><a href="#" class="btn-logout"><i class="bi bi-box-arrow-left mx-1"></i> Sign Out</a></li>
-                        <?php
-                        }else{
-                          ?>
-                        <li><a href="<?= site_url('login') ?>" class="btn-login"><i class="bi bi-box-arrow-in-right mx-1"></i> Sign In</a></li>
-                        <?php
-                        }
-                        ?>
-                    </ul>
-                </li>
-            </ul>
-        </nav>
+        <span><?= (session()->get('username')) ? session()->get('name') : "" ?></span></i>
+          <?php
+          if(session()->get('username')){
+          ?>
+            <span><a href="#" class="btn-logout"><i class="bi bi-box-arrow-left mx-1" data-toggle="tooltip" data-placement="left" title="Sign Out"></i></a></span>
+          <?php
+          }else{
+            ?>
+          <span><a href="<?= site_url('login') ?>" class="btn-login"><i class="bi bi-box-arrow-in-right mx-1"></i> Sign In</a></span>
+          <?php
+          }
+          ?>
       </div>
 
     </div>

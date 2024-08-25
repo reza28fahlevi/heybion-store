@@ -32,6 +32,10 @@
 <!-- Main JS File -->
 <script src="<?= site_url() ?>assets_user/js/main.js"></script>
 <script>
+
+  $(function () {
+    $('[data-toggle="tooltip"]').tooltip()
+  })
   function capitalizeFirstLetter(string) {
       if (!string) return string; // Handle empty strings
       return string.charAt(0).toUpperCase() + string.slice(1);
