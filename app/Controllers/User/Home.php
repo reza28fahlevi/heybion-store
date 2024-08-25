@@ -5,15 +5,17 @@ namespace App\Controllers\User;
 use App\Controllers\BaseController;
 use CodeIgniter\HTTP\ResponseInterface;
 use App\Models\ProductsModel;
+use App\Models\ProductPicturesModel;
 
 class Home extends BaseController
 {
-    protected $menu, $productModel;
+    protected $menu, $productModel, $galleryModel;
 
     public function __construct()
     {
         $this->menu = "Shop";
         $this->productModel = new ProductsModel();
+        $this->galleryModel = new ProductPicturesModel();
     }
 
     public function index()
@@ -30,9 +32,27 @@ class Home extends BaseController
     public function product($id)
     {
         $product = $this->productModel->find($id);
+        $productGallery = $this->galleryModel->where('product_id',$id)->findAll();
+        $gallery = [];
+        if(count($productGallery) == 0){
+            $gallery = [];
+        }elseif(count($productGallery) < 4){
+            for ($i = 0; $i < 4; $i++) {
+                if(count($productGallery) == 2){
+                    $index = $i % 2;
+                }elseif(count($productGallery) == 3){
+                    $index = $i % 3;
+                }else{
+                    $index = 0;
+                }
+                $gallery[$i] = $productGallery[$index];
+            }
+        }
+        // pre($gallery,1);
         $data = [
             "menu" => $this->menu,
             "product" => $product,
+            "gallery" => $gallery,
         ];
         return view('User/Gallery/View_Product', $data);
     }
