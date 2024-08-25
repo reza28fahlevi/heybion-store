@@ -12,6 +12,7 @@ $routes->get('getproduct/(:any)', 'User\Home::getProduct/$1');
 
 $routes->get('mycart', 'User\Transactions::myCart');
 $routes->post('addcart', 'User\Transactions::addCart');
+$routes->post('updatecart', 'User\Transactions::updateCart');
 $routes->post('removecart', 'User\Transactions::removeFromCart');
 
 $routes->get('mytransaction', 'User\Transactions::myHistory');

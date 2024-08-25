@@ -117,6 +117,42 @@ class Transactions extends BaseController
 
         return view('User/Cart/Cart_List', $data);
     }
+    
+    public function updateCart(){
+        $error = "";
+        if (!$this->checkLogin()) {
+            $error = "signin";
+            return $this->response->setJSON([
+                'status' => 'success',
+                'error' => $error,
+                'message' => "Login First",
+            ]);
+        }
+
+        $id = $this->request->getPost('id'); // Get the ID from the AJAX request
+        $qty = $this->request->getPost('qty');
+        $cart = $this->request->getPost('cart');
+
+        $update = [
+            'qty' => $qty
+        ];
+
+        $updateCart = $this->modelCart->update($cart,$update);
+        $product = $this->modelProduct->find($id);
+
+        if($product){
+            return $this->response->setJSON([
+                'status' => 'success',
+                'message' => "Success to get data ".$product->product_name." from catalog",
+                'data' => $product
+            ]);
+        }else{
+            return $this->response->setJSON([
+                'status' => 'error',
+                'message' => "Failed. Product not found",
+            ]);
+        }
+    }
 
     public function removeFromCart()
     {
@@ -270,13 +306,28 @@ class Transactions extends BaseController
                         'qty' => $cart->qty,
                     ];
                     $insertDetail = $this->modelInvoiceDetail->insert($datadetail);
-    
+                    $productDetail = $this->modelProduct->find($cart->product_id);
+                    if($productDetail){
+                        $remainingStock = $productDetail->stock - $cart->qty;
+                        $stock = [
+                            'stock' => $remainingStock
+                        ];
+                        $updateStock = $this->modelProduct->update($cart->product_id, $stock);
+                    }
+                    
                     $galleries = $this->modelGallery->where('product_id',$cart->product_id)->findAll();
                     $dataIPP = [];
                     foreach($galleries as $gallery){
                         if($gallery->path){
+                            $dataIPP = [
+                                'transaction_id' => $insertInvoice,
+                                'product_id' => $cart->product_id,
+                                'path' => $gallery->path
+                            ];
+                            // pre($dataIPP,1);
                             // $dataIPP
-                            $insertIPP = $this->modelInvoicePP->insert($dataIPP);
+                            if($dataIPP) $this->modelInvoicePP->insert($dataIPP);
+                            // pre($this->modelInvoicePP->insert($dataIPP),1);
                         }
                     }
                 }

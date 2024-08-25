@@ -34,7 +34,7 @@
         foreach($mycart as $cart){
         ?>
         
-        <div class="row gy-4 mx-5 my-2 justify-content-center cart-<?= $cart->cart_id ?>">
+        <div class="row gy-4 mx-5 my-2 justify-content-center cart-listing cart-<?= $cart->cart_id ?>">
           <div class="col-lg-2">
             <a href="<?= site_url('product/') . $cart->product_id ?>"><img src="<?= site_url('uploads/thumbnails/') . $cart->thumbnail ?>" class="img-fluid img-thumbnail " alt=""></a>
           </div>
@@ -50,7 +50,7 @@
                                 <div class="input-group-prepend">
                                     <button class="btn btn-outline-secondary border-0 min-qty" type="button" data-pid="<?= $cart->product_id ?>">-</button>
                                 </div>
-                                <input type="text" id="qty<?= $cart->product_id ?>" name="qty" class="form-control align-center qty" data-pid="<?= $cart->product_id ?>" style="text-align: center;" value="<?= $cart->qty ?>" aria-describedby="basic-addon1">
+                                <input type="text" id="qty<?= $cart->product_id ?>" name="qty" class="form-control align-center qty" data-pid="<?= $cart->product_id ?>" data-cart="<?= $cart->cart_id ?>" style="text-align: center;" value="<?= $cart->qty ?>" aria-describedby="basic-addon1">
                                 <div class="input-group-append">
                                     <button class="btn btn-outline-secondary border-0 plus-qty" type="button" data-pid="<?= $cart->product_id ?>">+</button>
                                 </div>
@@ -72,7 +72,7 @@
         <?php
         if($mycart){
         ?>
-        <div class="row gy-4 mx-5 my-2 justify-content-center">
+        <div class="row gy-4 mx-5 my-2 justify-content-center cart-listing">
           <div class="col-lg-8 content pricing">
             <h6><strong>Total Bill:</strong></h6>
             <ul>
@@ -101,11 +101,18 @@
         var id = pid
         if(qty == ""){
             $('#qty'+pid).val(1)
+            var qty = 1;
         }
+        var cart = $('#qty'+pid).data('cart')
         
         $.ajax({
-            url: '<?= site_url('getproduct'); ?>/' + id,
-            type: 'GET',
+            url: '<?= site_url('updatecart'); ?>',
+            type: 'POST',
+            data: {
+                'id': id,
+                'qty': qty,
+                'cart': cart
+            },
             success: function(response) {
                 if (response.status === 'success') {
                     if(eval(qty) > eval(response.data.stock)){
@@ -356,6 +363,7 @@
                         success: function(response) {
                             // Handle the response here
                             
+                            $('.cart-listing').remove()
                             Swal.fire({
                                 title: "Invoice bill created",
                                 text: "Please finish your payment!",
