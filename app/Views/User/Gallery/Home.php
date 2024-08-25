@@ -26,11 +26,11 @@
                 ?>
                 <div class="col-xl-3 col-lg-4 col-md-6">
                   <a href="<?= site_url('product/').$product->product_id ?>" >
-                    <div class="gallery-item h-100 d-flex align-items-center justify-content-center">
+                    <div class="gallery-item h-100 ">
                     <img src="<?= site_url('uploads/thumbnails/') . $product->thumbnail ?>" class="img-fluid my-auto" alt="">
-                    <div class="gallery-links">
-                        <div class="text-gallery text-center mt-5">
-                          <span style="color: #f4f4f4" class="mt-5"><?= $product->product_name . "<br>
+                    <div class="gallery-links d-flex align-items-center justify-content-center">
+                        <div class="text-gallery text-center">
+                          <span style="color: #f4f4f4"><?= $product->product_name . "<br>
                           Rp. " . $product->price_tag ?>
                           <?= ($product->product_status == 3) ? '<br> - Pre Order' : '' ?></span><br>
                         </div>
