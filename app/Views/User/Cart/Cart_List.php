@@ -285,7 +285,7 @@
             });
         })
 
-        $('.btn-address').on('click', function() {
+        function getAddress() {
             $.ajax({
                 url: '<?= site_url('getaddress'); ?>',
                 type: 'GET',
@@ -306,6 +306,10 @@
                     }
                 }
             });
+        }
+
+        $('.btn-address').on('click', function() {
+            getAddress()
         })
 
         $('#f_address').on('submit', function(e) {
@@ -362,21 +366,38 @@
                         // contentType: false, // Important: Set the content type to false to allow multipart form data
                         success: function(response) {
                             // Handle the response here
-                            
-                            $('.cart-listing').remove()
-                            Swal.fire({
-                                title: "Invoice bill created",
-                                text: "Please finish your payment!",
-                                icon: "success",
-                                showCancelButton: false,
-                                confirmButtonColor: "#8f160d",
-                                confirmButtonText: "Upload Payment!"
-                            }).then((result) => {
-                                if (result.isConfirmed) {
-                                    $("#tid").val(response.tid)
-                                    $("#payment-modal").modal('show')
-                                }
-                            });
+                            if(response.error == "signin"){
+                                window.location.href = '<?= site_url('login') ?>';
+                            }else if(response.error == 'empty_address'){
+                                Swal.fire({
+                                    title: "Address Not Found",
+                                    text: response.message,
+                                    icon: "warning",
+                                    showCancelButton: false,
+                                    confirmButtonColor: "#8f160d",
+                                    confirmButtonText: "Add Address"
+                                }).then((result) => {
+                                    if (result.isConfirmed) {
+                                        getAddress()
+                                        $('#address-modal').modal('show')
+                                    }
+                                });
+                            }else{
+                                $('.cart-listing').remove()
+                                Swal.fire({
+                                    title: "Invoice bill created",
+                                    text: "Please finish your payment!",
+                                    icon: "success",
+                                    showCancelButton: false,
+                                    confirmButtonColor: "#8f160d",
+                                    confirmButtonText: "Upload Payment!"
+                                }).then((result) => {
+                                    if (result.isConfirmed) {
+                                        $("#tid").val(response.tid)
+                                        $("#payment-modal").modal('show')
+                                    }
+                                });
+                            }
                         },
                         error: function(xhr, status, error) {
                             // Handle errors here

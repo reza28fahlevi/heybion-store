@@ -272,7 +272,15 @@ class Transactions extends BaseController
         foreach($carts as $c){
             $totalbill += $c->price_tag*$c->qty;
         }
-
+        $checkAddress = $this->modelUserAddress->where('user_id', $user->user_id)->first();
+        if(!$checkAddress){
+            $error = "empty_address";
+            return $this->response->setJSON([
+                'status' => 'success',
+                'error' => $error,
+                'message' => "Please input your address first!",
+            ]);
+        }
         $randomNumber = rand(0, 9999);
         $invoicenumber = "INV-".date('YmdHis').str_pad($randomNumber, 4, '0', STR_PAD_LEFT);
 
