@@ -105,6 +105,12 @@ class Transactions extends BaseController
         }
         $data = $this->model->where('deleted_at', null)->findAll($length, $start);
 
+        foreach($data as $key => $val){
+            $data[$key]->username = $this->modelUser->find($val->user_id)->username;
+            $data[$key]->date_order = date('d/m/Y', strtotime($val->created_at));
+        }
+        // if($data) pre($data);
+
         // Prepare the response
         $response = [
             "draw" => intval($this->request->getPost('draw')),
@@ -192,6 +198,10 @@ class Transactions extends BaseController
         }elseif($act == 'finished'){
             $data = [
                 'payment_status' => 5,
+            ];
+        }elseif($act == 'cancel'){
+            $data = [
+                'payment_status' => 6,
             ];
         }else{
             $data = [];

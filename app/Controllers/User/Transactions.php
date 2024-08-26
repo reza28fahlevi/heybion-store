@@ -136,15 +136,20 @@ class Transactions extends BaseController
         $update = [
             'qty' => $qty
         ];
-
-        $updateCart = $this->modelCart->update($cart,$update);
+        
         $product = $this->modelProduct->find($id);
-
+        if($product->stock < $qty){
+            $error = "Quantity More Than Stock";
+        }else{
+            $updateCart = $this->modelCart->update($cart,$update);
+        }
+        
         if($product){
             return $this->response->setJSON([
                 'status' => 'success',
                 'message' => "Success to get data ".$product->product_name." from catalog",
-                'data' => $product
+                'data' => $product,
+                'error' => $error
             ]);
         }else{
             return $this->response->setJSON([

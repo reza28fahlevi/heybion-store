@@ -30,6 +30,8 @@
                   <tr>
                     <th>ID</th>
                     <th>Invoice Number</th>
+                    <th>Receipt</th>
+                    <th>Date Order</th>
                     <th>Total Invoice</th>
                     <th>Status Order</th>
                     <th>Action</th>
@@ -63,6 +65,8 @@
           "columns": [
               { "data": "transaction_id" },
               { "data": "invoice_number" },
+              { "data": "username" },
+              { "data": "date_order" },
               { "data": "total_invoice" },
               { "data": "payment_status", "render": function(data, type, row){
                 if (data == 1){

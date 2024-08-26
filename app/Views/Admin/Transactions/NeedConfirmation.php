@@ -30,6 +30,8 @@
                   <tr>
                     <th>ID</th>
                     <th>Invoice Number</th>
+                    <th>Receipt</th>
+                    <th>Date Order</th>
                     <th>Total Invoice</th>
                     <th>Status Order</th>
                     <th>Action</th>
@@ -62,6 +64,8 @@
           "columns": [
               { "data": "transaction_id" },
               { "data": "invoice_number" },
+              { "data": "username" },
+              { "data": "date_order" },
               { "data": "total_invoice" },
               { "data": "payment_status", "render": function(data, type, row){
                 if (data == 1){
@@ -87,17 +91,22 @@
         var id = $(this).data('id')
         $('#transaction_id').val(id)
         $('.btn-submit').html('Confirm <i class="bi bi-check-lg"></i>')
+        $('.btn-cancel').remove()
+        $('.modal-footer .btn-submit').before('<button type="button" class="btn btn-danger btn-cancel" data-id="'+id+'">Cancel <i class="bi bi-x-lg"></i> </button>')
         $('#act').val('confirm')
 
         $.ajax({
             url: '<?= site_url('hb-admin/transactions/getdetail/') ?>' + id,
             type: 'GET',
             success: function(response) {
+                // console.log(response.data)
                 // Handle the response here
                 $('#invoice-title').html(response.data.invoice.invoice_number + ' - ' + response.data.invoice.badge_status)
                 $('#list-products').html(response.data.listProducts)
                 $('.img-payment-proof').html('<img src="<?= site_url('uploads/payment_bill/') ?>' + response.data.invoice.payment_proof + '" class="d-block mx-auto" style="max-height:400px !important; max-width:100% !important;" alt="...">')
-                $('.address-shpping').html('<strong>Shipping Address :</strong> ' + response.data.userDetail.recipient_name + ' | 0' + response.data.userDetail.phone_number + '<br>' +response.data.userDetail.address + ', ' + response.data.userDetail.pos_code + ', ' + response.data.userDetail.city + ', ' + response.data.userDetail.province + ', ' + response.data.userDetail.country)
+                if(response.data.userDetail){
+                  $('.address-shpping').html('<strong>Shipping Address :</strong> ' + response.data.userDetail.recipient_name + ' | 0' + response.data.userDetail.phone_number + '<br>' +response.data.userDetail.address + ', ' + response.data.userDetail.pos_code + ', ' + response.data.userDetail.city + ', ' + response.data.userDetail.province + ', ' + response.data.userDetail.country)
+                }
             },
             error: function(xhr, status, error) {
                 // Handle errors here
@@ -108,6 +117,50 @@
                 });
             }
         });
+      })
+
+      $(document).on('click', '.btn-cancel', function() {
+          Swal.fire({
+            title: "Are you sure want to cancel this order?",
+            text: "You won't be able to revert this!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#d33",
+            cancelButtonColor: "#6c757d",
+            confirmButtonText: "Yes, cancel order!"
+          }).then((result) => {
+            if (result.isConfirmed) {
+              $.ajax({
+                  url: '<?= site_url('hb-admin/transactions/submit') ?>',
+                  type: 'POST',
+                  data: {
+                     'act': 'cancel',
+                     'transaction_id': $(this).data('id')
+                  },
+                  // processData: false, // Important: Prevent jQuery from automatically transforming the data into a query string
+                  // contentType: false, // Important: Set the content type to false to allow multipart form data
+                  success: function(response) {
+                      // Handle the response here
+                      Swal.fire({
+                        title: capitalizeFirstLetter(response.status),
+                        text: response.message,
+                        icon: "success"
+                      });
+
+                      $('#invoice-modal').modal('hide')
+                      tableTransactions.ajax.reload(null, false);
+                  },
+                  error: function(xhr, status, error) {
+                      // Handle errors here
+                      Swal.fire({
+                        title: "Error",
+                        text: "Can't perform this action! Something wrong.",
+                        icon: "error"
+                      });
+                  }
+              });
+            }
+          });
       })
 
       $('#f_invoice').on('submit', function(e) {

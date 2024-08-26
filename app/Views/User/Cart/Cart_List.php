@@ -118,8 +118,12 @@
                     if(eval(qty) > eval(response.data.stock)){
                         $('.stock-'+pid).html(response.data.stock)
                         $('.stock-warning-'+pid).show()
+                        $('.btn-checkout').prop('disabled',true)
+                        $('.btn-checkout').addClass('disabled')
                     }else{
+                        $('.btn-checkout').prop('disabled',false)
                         $('.stock-warning-'+pid).hide()
+                        $('.btn-checkout').removeClass('disabled')
                     }
                     $('.price-tag-'+pid).html(eval(response.data.price_tag) * eval(qty))
                     totalbilling()

@@ -216,7 +216,7 @@ class InvoicesModel extends Model
                 pr.*
             FROM
                 bestseller bs
-                LEFT JOIN prd_products pr ON bs.product_id = pr.product_id")->getResult();
+                LEFT JOIN prd_products pr ON bs.product_id = pr.product_id ORDER BY bs.total DESC")->getResult();
         if(!$bestSeller){
             $bestSeller = $this->db->query("WITH bestseller AS (
                     SELECT
@@ -241,7 +241,7 @@ class InvoicesModel extends Model
                     pr.*
                 FROM
                     bestseller bs
-                    LEFT JOIN prd_products pr ON bs.product_id = pr.product_id")->getResult();
+                    LEFT JOIN prd_products pr ON bs.product_id = pr.product_id ORDER BY bs.total DESC")->getResult();
         }
         return $bestSeller;
     }

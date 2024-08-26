@@ -770,6 +770,14 @@ section,
   letter-spacing: 1px;
 }
 
+.btn-default:disabled, 
+.btn-default.disabled {
+    color: var(--default-btn-color);
+    background: var(--accent-color);
+    cursor: not-allowed; /* Change cursor to not-allowed */
+    opacity: 0.7; /* Adjust opacity */
+}
+
 .btn-default:hover {
   background-color: color-mix(in srgb, var(--accent-color) 90%, white 10%);
 }
