@@ -200,8 +200,10 @@ class Transactions extends BaseController
                 'payment_status' => 5,
             ];
         }elseif($act == 'cancel'){
+            $cancel_reason = htmlspecialchars((string)$this->request->getPost('cancel_reason'),ENT_QUOTES);
             $data = [
                 'payment_status' => 6,
+                'cancel_reason' => $cancel_reason,
             ];
         }else{
             $data = [];

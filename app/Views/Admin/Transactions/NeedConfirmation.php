@@ -50,6 +50,7 @@
     </section>
 
 <?= $this->include('Admin/Transactions/Invoice_modal') ?>
+<?= $this->include('Admin/Transactions/Cancel_modal') ?>
 <?= $this->include('Admin/Layout/Footer') ?>
 
 <script>
@@ -76,6 +77,8 @@
                   return `<span class="badge rounded-pill bg-warning"><i class="bi bi-box-seam me-1"></i> Processed</span>`;
                 } else if (data == 4){
                   return `<span class="badge rounded-pill bg-info"><i class="bi bi-truck me-1"></i> Shipping</span>`;
+                } else if (data == 6){
+                  return `<span class="badge rounded-pill bg-danger"><i class="bi bi-x-lg me-1"></i> Order Canceled</span>`;
                 } else {
                   return `<span class="badge rounded-pill bg-success"><i class="bi bi-patch-check me-1"></i> Finished</span>`;
                 }
@@ -130,37 +133,46 @@
             confirmButtonText: "Yes, cancel order!"
           }).then((result) => {
             if (result.isConfirmed) {
-              $.ajax({
-                  url: '<?= site_url('hb-admin/transactions/submit') ?>',
-                  type: 'POST',
-                  data: {
-                     'act': 'cancel',
-                     'transaction_id': $(this).data('id')
-                  },
-                  // processData: false, // Important: Prevent jQuery from automatically transforming the data into a query string
-                  // contentType: false, // Important: Set the content type to false to allow multipart form data
-                  success: function(response) {
-                      // Handle the response here
-                      Swal.fire({
-                        title: capitalizeFirstLetter(response.status),
-                        text: response.message,
-                        icon: "success"
-                      });
-
-                      $('#invoice-modal').modal('hide')
-                      tableTransactions.ajax.reload(null, false);
-                  },
-                  error: function(xhr, status, error) {
-                      // Handle errors here
-                      Swal.fire({
-                        title: "Error",
-                        text: "Can't perform this action! Something wrong.",
-                        icon: "error"
-                      });
-                  }
-              });
+              $('#ctid').val($(this).data('id'))
+              $('#cancel_reason').val('')
+              $('#cancel-modal').modal('show')
+              $('#invoice-modal').modal('hide')
             }
           });
+      })
+
+      $('#f_cancel').on('submit', function(e) {
+        e.preventDefault();
+        $.ajax({
+            url: '<?= site_url('hb-admin/transactions/submit') ?>',
+            type: 'POST',
+            data: {
+                'act': 'cancel',
+                'transaction_id': $('#ctid').val(),
+                'cancel_reason': $('#cancel_reason').val()
+            },
+            // processData: false, // Important: Prevent jQuery from automatically transforming the data into a query string
+            // contentType: false, // Important: Set the content type to false to allow multipart form data
+            success: function(response) {
+                // Handle the response here
+                Swal.fire({
+                  title: capitalizeFirstLetter(response.status),
+                  text: response.message,
+                  icon: "success"
+                });
+
+                $('#cancel-modal').modal('hide')
+                tableTransactions.ajax.reload(null, false);
+            },
+            error: function(xhr, status, error) {
+                // Handle errors here
+                Swal.fire({
+                  title: "Error",
+                  text: "Can't perform this action! Something wrong.",
+                  icon: "error"
+                });
+            }
+        });
       })
 
       $('#f_invoice').on('submit', function(e) {

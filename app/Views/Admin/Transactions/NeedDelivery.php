@@ -77,6 +77,8 @@
                   return `<span class="badge rounded-pill bg-warning"><i class="bi bi-box-seam me-1"></i> Processed</span>`;
                 } else if (data == 4){
                   return `<span class="badge rounded-pill bg-info"><i class="bi bi-truck me-1"></i> Shipping</span>`;
+                } else if (data == 6){
+                  return `<span class="badge rounded-pill bg-danger"><i class="bi bi-x-lg me-1"></i> Order Canceled</span>`;
                 } else {
                   return `<span class="badge rounded-pill bg-success"><i class="bi bi-patch-check me-1"></i> Finished</span>`;
                 }

@@ -34,6 +34,8 @@ if (!function_exists('badgeStatus')) {
             $badge = '<span class="badge bg-warning"><i class="bi bi-box-seam me-1"></i> Processed</span>';
         }elseif ($status == 4) {
             $badge = '<span class="badge bg-info"><i class="bi bi-truck me-1"></i> Shipping</span>';
+        }elseif ($status == 6) {
+            $badge = '<span class="badge bg-danger"><i class="bi bi-x-lg me-1"></i> Order Canceled</span>';
         }else{
             $badge = '<span class="badge bg-success"><i class="bi bi-patch-check me-1"></i> Finished</span>';
         }
