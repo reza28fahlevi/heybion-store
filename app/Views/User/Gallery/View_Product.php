@@ -49,7 +49,7 @@
                             <span class="invalid-feedback stock-warning text-danger">Maksimal pembelian barang ini <label class="stock"><?= $product->stock ?></label> item, kurangi pembelianmu, ya!</span>
                         </div>
                     </div>
-                    <button type="submit">ADD TO CART <i class="bi bi-cart3"></i></button>
+                    <button type="submit" class="btn-default btn-add-cart">ADD TO CART <i class="bi bi-cart3"></i></button>
                 </form>
             </div>
           </div>
@@ -142,8 +142,12 @@
                 if (response.status === 'success') {
                     if(eval(qty) > eval(response.data.stock)){
                         $('.stock-warning').show()
+                        $('.btn-add-cart').prop('disabled',true)
+                        $('.btn-add-cart').addClass('disabled')
                     }else{
                         $('.stock-warning').hide()
+                        $('.btn-add-cart').prop('disabled',false)
+                        $('.btn-add-cart').removeClass('disabled')
                     }
                     $('.price_tag').html(response.data.price_tag)
                     $('.stock').html(response.data.stock)
