@@ -12,7 +12,7 @@ class UserAddressModel extends Model
     protected $returnType       = 'object';
     protected $useSoftDeletes   = true;
     protected $protectFields    = true;
-    protected $allowedFields    = ['user_id','recipient_name','address','pos_code','city','province','country','phone_number','created_by','updated_by','deleted_by','is_deleted'];
+    protected $allowedFields    = ['user_id','recipient_name','address','pos_code','city','province','country','phone_number','created_by','updated_by','deleted_by','is_deleted', 'id_province', 'id_city'];
 
     protected bool $allowEmptyInserts = false;
     protected bool $updateOnlyChanged = true;

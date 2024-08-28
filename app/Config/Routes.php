@@ -11,6 +11,9 @@ $routes->get('product/(:any)', 'User\Home::product/$1');
 $routes->get('getproduct/(:any)', 'User\Home::getProduct/$1');
 
 $routes->get('mycart', 'User\Transactions::myCart');
+$routes->get('getProvince', 'User\Transactions::getProvince');
+$routes->post('getCity', 'User\Transactions::getCity');
+$routes->get('getCost', 'User\Transactions::getCost');
 $routes->post('addcart', 'User\Transactions::addCart');
 $routes->post('updatecart', 'User\Transactions::updateCart');
 $routes->post('removecart', 'User\Transactions::removeFromCart');

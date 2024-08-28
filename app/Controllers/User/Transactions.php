@@ -32,11 +32,12 @@ class Transactions extends BaseController
         $this->modelInvoicePP = new InvoiceProductPicturesModel();
     }
 
-    private function checkLogin(){
+    private function checkLogin()
+    {
         $session = session();
         if (!$session->get('logged')) {
             return false;
-        }else{
+        } else {
             return true;
         }
     }
@@ -54,24 +55,24 @@ class Transactions extends BaseController
         }
 
         // Get form data
-        $qty = htmlspecialchars((string)$this->request->getPost('qty'),ENT_QUOTES);
-        $product_id = htmlspecialchars((string)$this->request->getPost('pid'),ENT_QUOTES);
+        $qty = htmlspecialchars((string)$this->request->getPost('qty'), ENT_QUOTES);
+        $product_id = htmlspecialchars((string)$this->request->getPost('pid'), ENT_QUOTES);
 
         $user = $this->modelUser->where('username', session()->get('username'))->first();
 
         $mycart = $this->modelCart
-        ->where('product_id', $product_id)
-        ->where('status', 1)
-        ->where('user_id', $user->user_id)->first();
+            ->where('product_id', $product_id)
+            ->where('status', 1)
+            ->where('user_id', $user->user_id)->first();
 
-        if($mycart){
+        if ($mycart) {
             $data = [
                 'qty' => ($qty + $mycart->qty),
             ];
 
             // Update data into the database
             $execute = $this->modelCart->update($mycart->cart_id, $data);
-        }else{
+        } else {
             // Prepare data for insertion
             $data = [
                 'product_id' => $product_id,
@@ -98,6 +99,144 @@ class Transactions extends BaseController
         }
     }
 
+    public function getProvince()
+    {
+        $error = "";
+        if (!$this->checkLogin()) {
+            return redirect()->to('login');
+        }
+
+        $curl = curl_init();
+
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => "https://api.rajaongkir.com/starter/province",
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => "",
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 30,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => "GET",
+            CURLOPT_HTTPHEADER => array(
+                "key: 21af2f80476c25637947cfdd1024c8c7"
+            ),
+        ));
+
+        $response = json_decode(curl_exec($curl));
+        $rajaongkir = $response->rajaongkir;
+        $err = curl_error($curl);
+
+        curl_close($curl);
+
+        if ($response) {
+            return $this->response->setJSON([
+                'status' => 'success',
+                'error' => $error,
+                'message' => "Successfully get data province",
+                'data' => $rajaongkir->results
+            ]);
+        } else {
+            return $this->response->setJSON([
+                'status' => 'error',
+                'error' => $error,
+                'message' => $err,
+            ]);
+        }
+    }
+
+    public function getCity()
+    {
+        $error = "";
+        if (!$this->checkLogin()) {
+            return redirect()->to('login');
+        }
+
+        $id_province = $this->request->getPost('province');
+
+        $curl = curl_init();
+
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => "https://api.rajaongkir.com/starter/city?province=$id_province",
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => "",
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 30,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => "GET",
+            CURLOPT_HTTPHEADER => array(
+                "key: 21af2f80476c25637947cfdd1024c8c7"
+            ),
+        ));
+
+        $response = json_decode(curl_exec($curl));
+        $rajaongkir = $response->rajaongkir;
+        $err = curl_error($curl);
+
+        curl_close($curl);
+
+        if ($response) {
+            return $this->response->setJSON([
+                'status' => 'success',
+                'error' => $error,
+                'message' => "Successfully get data city",
+                'data' => $rajaongkir->results
+            ]);
+        } else {
+            return $this->response->setJSON([
+                'status' => 'error',
+                'error' => $error,
+                'message' => $err,
+            ]);
+        }
+    }
+
+    public function getCost()
+    {
+        $error = "";
+        if (!$this->checkLogin()) {
+            return redirect()->to('login');
+        }
+        $user = $this->modelUser->where('username', session()->get('username'))->first();
+        $userAddress = $this->modelUserAddress->where('user_id', $user->user_id)->first();
+
+        $curl = curl_init();
+
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => "https://api.rajaongkir.com/starter/cost",
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => "",
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 30,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => "POST",
+            CURLOPT_POSTFIELDS => "origin=23&destination=$userAddress->id_city&weight=1000&courier=jne",
+            CURLOPT_HTTPHEADER => array(
+                "content-type: application/x-www-form-urlencoded",
+                "key: 21af2f80476c25637947cfdd1024c8c7"
+            ),
+        ));
+
+        $response = json_decode(curl_exec($curl));
+        $rajaongkir = $response->rajaongkir;
+        $err = curl_error($curl);
+
+        curl_close($curl);
+
+        if ($response) {
+            return $this->response->setJSON([
+                'status' => 'success',
+                'error' => $error,
+                'message' => "Successfully get data cost",
+                'data' => $rajaongkir->results
+            ]);
+        } else {
+            return $this->response->setJSON([
+                'status' => 'error',
+                'error' => $error,
+                'message' => $err,
+            ]);
+        }
+    }
+
     public function myCart()
     {
         $error = "";
@@ -117,8 +256,9 @@ class Transactions extends BaseController
 
         return view('User/Cart/Cart_List', $data);
     }
-    
-    public function updateCart(){
+
+    public function updateCart()
+    {
         $error = "";
         if (!$this->checkLogin()) {
             $error = "signin";
@@ -136,22 +276,22 @@ class Transactions extends BaseController
         $update = [
             'qty' => $qty
         ];
-        
+
         $product = $this->modelProduct->find($id);
-        if($product->stock < $qty){
+        if ($product->stock < $qty) {
             $error = "Quantity More Than Stock";
-        }else{
-            $updateCart = $this->modelCart->update($cart,$update);
+        } else {
+            $updateCart = $this->modelCart->update($cart, $update);
         }
-        
-        if($product){
+
+        if ($product) {
             return $this->response->setJSON([
                 'status' => 'success',
-                'message' => "Success to get data ".$product->product_name." from catalog",
+                'message' => "Success to get data " . $product->product_name . " from catalog",
                 'data' => $product,
                 'error' => $error
             ]);
-        }else{
+        } else {
             return $this->response->setJSON([
                 'status' => 'error',
                 'message' => "Failed. Product not found",
@@ -172,7 +312,7 @@ class Transactions extends BaseController
         }
 
         $id = $this->request->getPost('id'); // Get the ID from the AJAX request
-        
+
         // Check if the cart exists
         $cart = $this->modelCart->find($id);
         if (!$cart) {
@@ -203,7 +343,7 @@ class Transactions extends BaseController
         // Check if the address exists
         $address = $this->modelUserAddress->where('user_id', $user->user_id)->first();
         $return = "add";
-        if($address) $return = "update";
+        if ($address) $return = "update";
         if ($return) {
             return $this->response->setJSON(['status' => 'success', 'return' => $return, 'data' => $address, 'message' => 'Getting Address']);
         } else {
@@ -223,30 +363,34 @@ class Transactions extends BaseController
             ]);
         }
 
-        $recipient_name = htmlspecialchars((string)$this->request->getPost('recipient_name'),ENT_QUOTES);
-        $phone_number = htmlspecialchars((string)$this->request->getPost('phone_number'),ENT_QUOTES);
-        $address = htmlspecialchars((string)$this->request->getPost('address'),ENT_QUOTES);
-        $pos_code = htmlspecialchars((string)$this->request->getPost('pos_code'),ENT_QUOTES);
-        $city = htmlspecialchars((string)$this->request->getPost('city'),ENT_QUOTES);
-        $province = htmlspecialchars((string)$this->request->getPost('province'),ENT_QUOTES);
-        $country = htmlspecialchars((string)$this->request->getPost('country'),ENT_QUOTES);
+        $recipient_name = htmlspecialchars((string)$this->request->getPost('recipient_name'), ENT_QUOTES);
+        $phone_number = htmlspecialchars((string)$this->request->getPost('phone_number'), ENT_QUOTES);
+        $address = htmlspecialchars((string)$this->request->getPost('address'), ENT_QUOTES);
+        $pos_code = htmlspecialchars((string)$this->request->getPost('pos_code'), ENT_QUOTES);
+        $city = htmlspecialchars((string)$this->request->getPost('city'), ENT_QUOTES);
+        $id_city = htmlspecialchars((string)$this->request->getPost('id_city'), ENT_QUOTES);
+        $province = htmlspecialchars((string)$this->request->getPost('province'), ENT_QUOTES);
+        $id_province = htmlspecialchars((string)$this->request->getPost('id_province'), ENT_QUOTES);
+        $country = htmlspecialchars((string)$this->request->getPost('country'), ENT_QUOTES);
 
         $data = [
             'recipient_name' => $recipient_name,
             'phone_number' => $phone_number,
             'address' => $address,
             'pos_code' => $pos_code,
-            'city' => $city, 
+            'city' => $city,
+            'id_city' => $id_city,
             'province' => $province,
+            'id_province' => $id_province,
             'country' => $country
         ];
-        
+
         $user = $this->modelUser->where('username', session()->get('username'))->first();
         // Check if the address exists
         $address = $this->modelUserAddress->where('user_id', $user->user_id)->first();
-        if($address){
+        if ($address) {
             $return = $this->modelUserAddress->update($address->uad_id, $data);
-        }else{
+        } else {
             $data['user_id'] = $user->user_id;
             $return = $this->modelUserAddress->insert($data);
         }
@@ -274,11 +418,11 @@ class Transactions extends BaseController
         $user = $this->modelUser->where('username', session()->get('username'))->first();
         $carts = $this->modelCart->getMyCart($user->user_id);
         $totalbill = 0;
-        foreach($carts as $c){
-            $totalbill += $c->price_tag*$c->qty;
+        foreach ($carts as $c) {
+            $totalbill += $c->price_tag * $c->qty;
         }
         $checkAddress = $this->modelUserAddress->where('user_id', $user->user_id)->first();
-        if(!$checkAddress){
+        if (!$checkAddress) {
             $error = "empty_address";
             return $this->response->setJSON([
                 'status' => 'success',
@@ -287,11 +431,13 @@ class Transactions extends BaseController
             ]);
         }
         $randomNumber = rand(0, 9999);
-        $invoicenumber = "INV-".date('YmdHis').str_pad($randomNumber, 4, '0', STR_PAD_LEFT);
+        $invoicenumber = "INV-" . date('YmdHis') . str_pad($randomNumber, 4, '0', STR_PAD_LEFT);
 
         $dataInvoice = [
             'invoice_number' => $invoicenumber,
-            'total_invoice' => $totalbill,
+            'total_invoice' => $totalbill + intval(htmlspecialchars((string)$this->request->getPost('ongkir'), ENT_QUOTES)),
+            'total_cart' => $totalbill,
+            'shipping_cost' => intval(htmlspecialchars((string)$this->request->getPost('ongkir'), ENT_QUOTES)),
             'payment_method' => 1,
             'payment_status' => 1,
             'user_id' => $user->user_id,
@@ -305,10 +451,10 @@ class Transactions extends BaseController
         try {
             $insertInvoice = $this->modelInvoices->insert($dataInvoice);
 
-            if($insertInvoice){
+            if ($insertInvoice) {
                 $this->modelCart->updateMyCart($user->user_id);
                 $datadetail = [];
-                foreach($carts as $cart){
+                foreach ($carts as $cart) {
                     $datadetail = [
                         'transaction_id' => $insertInvoice,
                         'product_id' => $cart->product_id,
@@ -320,18 +466,18 @@ class Transactions extends BaseController
                     ];
                     $insertDetail = $this->modelInvoiceDetail->insert($datadetail);
                     $productDetail = $this->modelProduct->find($cart->product_id);
-                    if($productDetail){
+                    if ($productDetail) {
                         $remainingStock = $productDetail->stock - $cart->qty;
                         $stock = [
                             'stock' => $remainingStock
                         ];
                         $updateStock = $this->modelProduct->update($cart->product_id, $stock);
                     }
-                    
-                    $galleries = $this->modelGallery->where('product_id',$cart->product_id)->findAll();
+
+                    $galleries = $this->modelGallery->where('product_id', $cart->product_id)->findAll();
                     $dataIPP = [];
-                    foreach($galleries as $gallery){
-                        if($gallery->path){
+                    foreach ($galleries as $gallery) {
+                        if ($gallery->path) {
                             $dataIPP = [
                                 'transaction_id' => $insertInvoice,
                                 'product_id' => $cart->product_id,
@@ -339,14 +485,13 @@ class Transactions extends BaseController
                             ];
                             // pre($dataIPP,1);
                             // $dataIPP
-                            if($dataIPP) $this->modelInvoicePP->insert($dataIPP);
+                            if ($dataIPP) $this->modelInvoicePP->insert($dataIPP);
                             // pre($this->modelInvoicePP->insert($dataIPP),1);
                         }
                     }
                 }
-
             }
-            
+
             // Check if the transaction was successful
             if ($db->transStatus() === FALSE) {
                 // Something went wrong, so rollback
@@ -378,7 +523,7 @@ class Transactions extends BaseController
             ]);
         }
 
-        $transaction_id = htmlspecialchars((string)$this->request->getPost('tid'),ENT_QUOTES);
+        $transaction_id = htmlspecialchars((string)$this->request->getPost('tid'), ENT_QUOTES);
 
         $path = WRITEPATH . 'uploads/payment_bill';
         $picName = "";
@@ -389,7 +534,7 @@ class Transactions extends BaseController
             } else {
                 $error = "Failed to create directory.";
             }
-        } 
+        }
         if (file_exists($path)) {
             if ($this->request->getFile('upload_bill')->isValid()) {
                 $pic = $this->request->getFile('upload_bill');
@@ -404,9 +549,9 @@ class Transactions extends BaseController
         ];
         $update = $this->modelInvoices->update($transaction_id, $data);
 
-        if($update){
+        if ($update) {
             return $this->response->setJSON(['status' => 'success', 'message' => 'Bill successfully uploaded']);
-        }else{
+        } else {
             return $this->response->setJSON(['status' => 'error', 'message' => 'Cannot do this action, something wrong!']);
         }
     }
@@ -420,17 +565,17 @@ class Transactions extends BaseController
         $user = $this->modelUser->where('username', session()->get('username'))->first();
         $userAddress = $this->modelUserAddress->where('user_id', $user->user_id)->first();
 
-        $mytransaction = $this->modelInvoices->where('user_id',$user->user_id)->orderBy('invoice_number', 'DESC')->findAll();
-        if($mytransaction){
-            foreach($mytransaction as $key => $value){
-                $mytransaction[$key]->details = $this->modelInvoiceDetail->where('transaction_id',$value->transaction_id)->orderBy('trd_id', 'ASC')->findAll();
+        $mytransaction = $this->modelInvoices->where('user_id', $user->user_id)->orderBy('invoice_number', 'DESC')->findAll();
+        if ($mytransaction) {
+            foreach ($mytransaction as $key => $value) {
+                $mytransaction[$key]->details = $this->modelInvoiceDetail->where('transaction_id', $value->transaction_id)->orderBy('trd_id', 'ASC')->findAll();
                 $btn_pay = '';
                 $btn_finish = '';
-                if($value->payment_status == 1){
-                    $btn_pay = '<button type="button" class="btn-default btn-paybill form-control" data-trd="'.$value->transaction_id.'"> <i class="bi bi-upload"></i> Pay</button>';
+                if ($value->payment_status == 1) {
+                    $btn_pay = '<button type="button" class="btn-default btn-paybill form-control" data-trd="' . $value->transaction_id . '"> <i class="bi bi-upload"></i> Pay</button>';
                 }
-                if($value->payment_status == 4){
-                    $btn_finish = '<button type="button" class="btn-default btn-finish form-control" data-trd="'.$value->transaction_id.'"> <i class="bi bi-patch-check"></i> Received</button>';
+                if ($value->payment_status == 4) {
+                    $btn_finish = '<button type="button" class="btn-default btn-finish form-control" data-trd="' . $value->transaction_id . '"> <i class="bi bi-patch-check"></i> Received</button>';
                 }
                 $mytransaction[$key]->badge_status = badgeStatus($value->payment_status);
                 $mytransaction[$key]->btnPay = $btn_pay;
@@ -450,7 +595,7 @@ class Transactions extends BaseController
     public function getDetailInvoice($id)
     {
         $error = "";
-        
+
         if (!$this->checkLogin()) {
             $error = "signin";
             return $this->response->setJSON([
@@ -465,20 +610,20 @@ class Transactions extends BaseController
 
         $invoice = $this->modelInvoices->find($id);
         $invoiceDetails = $this->modelInvoiceDetail->where('transaction_id', $id)->orderBy('trd_id', 'ASC')->findAll();
-        
+
         $invoice->badge_status = badgeStatus($invoice->payment_status);
 
         $listProducts = '';
-        foreach($invoiceDetails as $detail){
+        foreach ($invoiceDetails as $detail) {
             $listProducts .= '
             <div class="row gy-4 mb-1 justify-content-center">
                 <div class="col-lg-2">
-                    <a href="'.site_url('product/'.$detail->product_id).'"><img src="'.site_url('uploads/thumbnails/'.$detail->thumbnail).'" class="img-fluid img-thumbnail " alt=""></a>
+                    <a href="' . site_url('product/' . $detail->product_id) . '"><img src="' . site_url('uploads/thumbnails/' . $detail->thumbnail) . '" class="img-fluid img-thumbnail " alt=""></a>
                 </div>
                 <div class="col-lg-10 content pricing">
-                    <h6><a href="'.site_url('product/'.$detail->product_id).'">'.$detail->product_name.'</a></h6>
+                    <h6><a href="' . site_url('product/' . $detail->product_id) . '">' . $detail->product_name . '</a></h6>
                     <ul>
-                        <li class="pricing-item d-flex justify-content-between"><h4 style="font-size: 15px;"><i class="bi bi-chevron-right"></i> Rp. <label class="item-pricing">'.$detail->price_tag.'</label></h4><h4>x'.$detail->qty.'</h4></li>
+                        <li class="pricing-item d-flex justify-content-between"><h4 style="font-size: 15px;"><i class="bi bi-chevron-right"></i> Rp. <label class="item-pricing">' . $detail->price_tag . '</label></h4><h4>x' . $detail->qty . '</h4></li>
                     </ul>
                 </div>
             </div>';
@@ -491,9 +636,9 @@ class Transactions extends BaseController
             "listProducts" => $listProducts
         ];
 
-        if($invoice){
+        if ($invoice) {
             return $this->response->setJSON(['status' => 'success', 'data' => $data, 'message' => 'Success get data']);
-        }else{
+        } else {
             return $this->response->setJSON(['status' => 'error', 'message' => 'Cannot do this action, something wrong!']);
         }
     }
@@ -510,7 +655,7 @@ class Transactions extends BaseController
             ]);
         }
 
-        $transaction_id = htmlspecialchars((string)$this->request->getPost('trd'),ENT_QUOTES);
+        $transaction_id = htmlspecialchars((string)$this->request->getPost('trd'), ENT_QUOTES);
 
         $data = [
             'payment_status' => 5,
@@ -519,9 +664,9 @@ class Transactions extends BaseController
         // pre($data,1);
         $update = $this->modelInvoices->update($transaction_id, $data);
 
-        if($update){
+        if ($update) {
             return $this->response->setJSON(['status' => 'success', 'message' => 'Order Finished!']);
-        }else{
+        } else {
             return $this->response->setJSON(['status' => 'error', 'message' => 'Cannot do this action, something wrong!']);
         }
     }
