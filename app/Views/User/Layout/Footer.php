@@ -8,7 +8,7 @@
       <p>© <span>Copyright</span> <strong class="px-1 sitename"><i class="bi bi-triangle-fill"></i> E</strong> <span>All Rights Reserved</span></p>
     </div>
     <div class="credits">
-      Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>. Made with <i class="bi bi-heart-fill"></i>
+      Designed by <a href="http://delta-e.cloud/">Heybion Store</a>.
     </div>
   </div>
 
