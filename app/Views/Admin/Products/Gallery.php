@@ -11,7 +11,7 @@
           <div class="card">
             <div class="card-body">
               <h5 class="card-title"><?= $product->product_name ?></h5>
-              <button type="button" class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#product-gallery-modal">
+              <button type="button" class="btn btn-primary mb-3 btn-add" data-bs-toggle="modal" data-bs-target="#product-gallery-modal">
                 <i class="bi bi-plus me-1"></i> Add
               </button>
               <!-- Table with stripped rows -->
@@ -81,6 +81,7 @@
                   });
                   tableProduct.ajax.reload(null, false);
                   $('#product-gallery-modal').modal('hide')
+                  $('#imagesProduct').val('')
               },
               error: function(xhr, status, error) {
                   // Handle errors here

@@ -19,11 +19,14 @@
 
 /* Global Colors - The following color variables are used throughout the website. Updating them here will change the color scheme of the entire website */
 :root {     
-  --background-color: #f4f4f4;
+  --background-color: #ffffff;
+  --background-color-secondary: #f4f4f4;
   --default-color: #3d3d3d;
   --default-btn-color: #f4f4f4;
+  --default-btn-color-secondary: #f4f4f4;
   --heading-color: #000000;
   --accent-color: #8f160d;
+  --accent-secondary: #3d3d3d;
   --surface-color: #ffffff;
   --contrast-color: #000000;
   /* --background-color: #000000; Background color for the entire website, including individual sections */
@@ -157,7 +160,7 @@ h6 {
 --------------------------------------------------------------*/
 .header {
   color: var(--default-color);
-  background-color: var(--background-color);
+  background-color: var(--background-color-secondary);
   padding: 20px 0;
   transition: all 0.5s;
   z-index: 997;
@@ -644,7 +647,7 @@ h6 {
 
 .scroll-top i {
   font-size: 24px;
-  color: var(--default-color);
+  color: var(--surface-color);
   line-height: 0;
 }
 
@@ -750,6 +753,55 @@ section,
 }
 
 /*--------------------------------------------------------------
+# Global Button
+--------------------------------------------------------------*/
+.btn-default {
+  color: var(--default-btn-color);
+  background: var(--accent-color);
+  font-weight: 400;
+  font-size: 14px;
+  display: inline-block;
+  margin-top: 20px;
+  padding: 7px 20px;
+  border: 0;
+  border-radius: 4px;
+  transition: 0.5s;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.btn-default:disabled, 
+.btn-default.disabled {
+    color: var(--default-btn-color);
+    background: var(--accent-color);
+    cursor: not-allowed; /* Change cursor to not-allowed */
+    opacity: 0.7; /* Adjust opacity */
+}
+
+.btn-default:hover {
+  background-color: color-mix(in srgb, var(--accent-color) 90%, white 10%);
+}
+
+.btn-default-secondary {
+  color: var(--default-btn-color-secondary);
+  background: var(--accent-secondary);
+  font-weight: 400;
+  font-size: 14px;
+  display: inline-block;
+  margin-top: 20px;
+  padding: 7px 20px;
+  border: 0;
+  border-radius: 4px;
+  transition: 0.5s;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.btn-default-secondary:hover {
+  background-color: color-mix(in srgb, var(--accent-secondary) 90%, white 10%);
+}
+
+/*--------------------------------------------------------------
 # Global Section Titles
 --------------------------------------------------------------*/
 .section-title {
@@ -824,6 +876,12 @@ section,
 }
 
 .hero p {
+  color: color-mix(in srgb, var(--default-color), transparent 30%);
+  margin-bottom: 30px;
+  font-size: 18px;
+}
+
+.spassword {
   color: color-mix(in srgb, var(--default-color), transparent 30%);
   margin-bottom: 30px;
   font-size: 18px;
@@ -1309,6 +1367,16 @@ section,
   color: var(--accent-color);
 }
 
+.address-detail {
+  width: 100%;
+  height: 100%;
+}
+
+.address-detail h4 {
+  margin: 0;
+  font-size: 18px;
+  color: var(--accent-color);
+}
 /*--------------------------------------------------------------
 # Contact Section
 --------------------------------------------------------------*/
@@ -1355,6 +1423,7 @@ section,
 }
 
 .contact .php-email-form input[type=text],
+.contact .php-email-form input[type=password],
 .contact .php-email-form input[type=email],
 .contact .php-email-form textarea {
   font-size: 14px;
@@ -1367,12 +1436,14 @@ section,
 }
 
 .contact .php-email-form input[type=text]:focus,
+.contact .php-email-form input[type=password]:focus,
 .contact .php-email-form input[type=email]:focus,
 .contact .php-email-form textarea:focus {
   border-color: var(--accent-color);
 }
 
 .contact .php-email-form input[type=text]::placeholder,
+.contact .php-email-form input[type=password]::placeholder,
 .contact .php-email-form input[type=email]::placeholder,
 .contact .php-email-form textarea::placeholder {
   color: color-mix(in srgb, var(--default-color), transparent 70%);
@@ -1397,9 +1468,70 @@ section,
   background-color: color-mix(in srgb, var(--accent-color) 90%, white 10%);
 }
 
+.contact .php-email-form input[type=checkbox] {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  width: 20px;
+  height: 20px;
+  box-shadow: none;
+  border-radius: 0;
+  color: var(--default-color);
+  background-color: var(--surface-color);
+  border-color: color-mix(in srgb, var(--default-color), transparent 80%);
+  position: relative;
+  cursor: pointer;
+}
+
+.contact .php-email-form input[type=checkbox]:checked {
+  background-color: var(--accent-color); /* Change this to your desired color */
+  border-color: var(--accent-color);
+}
+
+.contact .php-email-form input[type=checkbox]:checked::before {
+  content: '';
+  position: absolute;
+  top: 2px;
+  left: 6px;
+  width: 6px;
+  height: 12px;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
 /*--------------------------------------------------------------
 # Starter Section Section
 --------------------------------------------------------------*/
 .starter-section {
   /* Add your styles here */
+}
+
+.form-input input[type=text],
+.form-input input[type=password],
+.form-input input[type=email],
+.form-input input[type=file],
+.form-input textarea {
+  font-size: 14px;
+  padding: 10px 15px;
+  box-shadow: none;
+  border-radius: 0;
+  color: var(--default-color);
+  background-color: var(--surface-color);
+  border-color: color-mix(in srgb, var(--default-color), transparent 80%);
+}
+
+.form-input input[type=text]:focus,
+.form-input input[type=password]:focus,
+.form-input input[type=email]:focus,
+.form-input input[type=file]:focus,
+.form-input textarea:focus {
+  border-color: var(--accent-color);
+}
+
+.form-input input[type=text]::placeholder,
+.form-input input[type=password]::placeholder,
+.form-input input[type=email]::placeholder,
+.form-input input[type=file]::placeholder,
+.form-input textarea::placeholder {
+  color: color-mix(in srgb, var(--default-color), transparent 70%);
 }

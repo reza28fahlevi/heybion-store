@@ -18,9 +18,9 @@
 <a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
 
 <!-- Preloader -->
-<div id="preloader">
+<!-- <div id="preloader">
   <div class="line"></div>
-</div>
+</div> -->
 
 <!-- Vendor JS Files -->
 <script src="<?= site_url() ?>assets_user/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
@@ -32,10 +32,32 @@
 <!-- Main JS File -->
 <script src="<?= site_url() ?>assets_user/js/main.js"></script>
 <script>
+
+  $(function () {
+    $('[data-toggle="tooltip"]').tooltip()
+  })
   function capitalizeFirstLetter(string) {
       if (!string) return string; // Handle empty strings
       return string.charAt(0).toUpperCase() + string.slice(1);
   }
+  $(document).ready(function(){
+    $('.btn-logout').on("click", function() {
+      Swal.fire({
+        title: "",
+        text: "Are you sure want to sign out?",
+        icon: "question",
+        showCancelButton: true,
+        confirmButtonColor: "#8f160d",
+        cancelButtonColor: "#3d3d3d",
+        confirmButtonText: "Sign Out"
+      }).then((result) => {
+        if (result.isConfirmed){
+          window.location.href = '<?= site_url('logout') ?>';
+        }
+      });
+    })
+  })
+    
 </script>
 </body>
 

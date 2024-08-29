@@ -37,7 +37,7 @@ class ProductPicturesModel extends Model
     protected $allowCallbacks = true;
     protected $beforeInsert   = ['beforeAdd'];
     protected $afterInsert    = [];
-    protected $beforeUpdate   = [];
+    protected $beforeUpdate   = ['beforeUpdate'];
     protected $afterUpdate    = [];
     protected $beforeFind     = [];
     protected $afterFind      = [];
@@ -59,8 +59,7 @@ class ProductPicturesModel extends Model
     protected function afterDelete(array $data)
     {
         // Perform the update after soft delete
-        $db = \Config\Database::connect();
-        $builder = $db->table($this->table);
+        $builder = $this->db->table($this->table);
         $builder->where($this->primaryKey, $data['id'][0]); // Where clause to select the deleted row
         $builder->update([
             'is_deleted' => true,

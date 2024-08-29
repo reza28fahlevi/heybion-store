@@ -42,7 +42,7 @@ class ProductsModel extends Model
     protected $beforeFind     = [];
     protected $afterFind      = [];
     protected $beforeDelete   = [];
-    protected $afterDelete    = [];
+    protected $afterDelete    = ['afterDelete'];
 
     protected function beforeAdd(array $data){
         $data['data']['is_deleted'] = false;
@@ -59,8 +59,7 @@ class ProductsModel extends Model
     protected function afterDelete(array $data)
     {
         // Perform the update after soft delete
-        $db = \Config\Database::connect();
-        $builder = $db->table($this->table);
+        $builder = $this->db->table($this->table);
         $builder->where($this->primaryKey, $data['id'][0]); // Where clause to select the deleted row
         $builder->update([
             'is_deleted' => true,

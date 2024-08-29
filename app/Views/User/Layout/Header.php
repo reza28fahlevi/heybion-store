@@ -12,8 +12,8 @@
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9.17.2/dist/sweetalert2.min.js"></script>
   <script src="https://cdn.datatables.net/2.1.2/js/dataTables.js"></script>
   <!-- Favicons -->
-  <link href="<?= site_url() ?>assets_user/img/favicon.png" rel="icon">
-  <link href="<?= site_url() ?>assets_user/img/apple-touch-icon.png" rel="apple-touch-icon">
+  <link href="<?=site_url()?>assets/img/favicon.png" rel="icon">
+  <link href="<?=site_url()?>assets/img/apple-touch-icon.png" rel="apple-touch-icon">
 
   <!-- Fonts -->
   <link href="https://fonts.googleapis.com" rel="preconnect">
@@ -48,7 +48,7 @@
   <header id="header" class="header d-flex align-items-center sticky-top">
     <div class="container-fluid position-relative d-flex align-items-center justify-content-between">
 
-      <a href="index.html" class="logo d-flex align-items-center me-auto me-xl-0">
+      <a href="<?= site_url() ?>" class="logo d-flex align-items-center me-auto me-xl-0">
         <!-- Uncomment the line below if you also wish to use an image logo -->
         <!-- <img src="<?= site_url() ?>assets_user/img/logo.png" alt=""> -->
         <h1 class="sitename">HeyBion</h1>
@@ -57,25 +57,27 @@
 
       <nav id="navmenu" class="navmenu">
         <ul>
-          <li><a href="<?= site_url() ?>" class="active"><i class="bi bi-bag mx-1"></i> Shop</a></li>
-          <li><a href="<?= site_url('mycart') ?>"><i class="bi bi-lg bi-basket mx-1"></i> Cart</a></li>
+          <li><a href="<?= site_url() ?>" class="<?= ($menu == "Shop") ? 'active' : '' ?>"><i class="bi bi-bag mx-1"></i> Shop</a></li>
+          <li><a href="<?= site_url('mycart') ?>" class="<?= ($menu == "Cart") ? 'active' : '' ?>"><i class="bi bi-lg bi-basket mx-1"></i> Cart</a></li>
           
-          <li><a href="<?= site_url('mytransaction') ?>"><i class="bi bi-list mx-1"></i> Transaction</a></li>
+          <li><a href="<?= site_url('mytransaction') ?>" class="<?= ($menu == "Transaction") ? 'active' : '' ?>"><i class="bi bi-list mx-1"></i> Transaction</a></li>
         </ul>
         <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
       </nav>
 
       <div class="header-social-links">
-        <nav id="navuser" class="navmenu mx-5">
-            <ul>
-                <li class="dropdown"><a href="#"><span>Guest</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
-                    <ul>
-                        <li><a href="<?= site_url('logout') ?>"><i class="bi bi-box-arrow-in-right mx-1"></i> Sign In</a></li>
-                        <li><a href="<?= site_url('logout') ?>"><i class="bi bi-box-arrow-left mx-1"></i> Sign Out</a></li>
-                    </ul>
-                </li>
-            </ul>
-        </nav>
+        <span><?= (session()->get('username')) ? session()->get('name') : "" ?></span></i>
+          <?php
+          if(session()->get('username')){
+          ?>
+          <span><a href="#" class="btn-logout"><i class="bi bi-box-arrow-left mx-1" data-toggle="tooltip" data-placement="left" title="Sign Out"></i></a></span>
+          <?php
+          }else{
+            ?>
+          <span><a href="<?= site_url('login') ?>" class="btn-login"><i class="bi bi-box-arrow-in-right mx-1"></i> Sign In</a></span>
+          <?php
+          }
+          ?>
       </div>
 
     </div>
