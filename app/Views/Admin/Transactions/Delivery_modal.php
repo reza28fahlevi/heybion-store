@@ -11,10 +11,10 @@
                     <div class="row mb-3">
                         <label for="inputText" class="col-sm-2 col-form-label">Delivery Service</label>
                         <div class="col-sm-10">
-                        <!-- <input type="text" class="form-control" id="delivery_service" name="delivery_service" placeholder="JNE/JNT/AnterAja/SiCepat" required> -->
-                        <select name="delivery_service" id="delivery_service" class="form-control">
+                        <input type="text" class="form-control" id="delivery_service" name="delivery_service" required disabled>
+                        <!-- <select name="delivery_service" id="delivery_service" class="form-control">
                             <option value="JNE">JNE</option>
-                        </select>
+                        </select> -->
                         </div>
                     </div>
                     <div class="row mb-3">
@@ -32,3 +32,4 @@
         </div>
     </div>
 </div>
+

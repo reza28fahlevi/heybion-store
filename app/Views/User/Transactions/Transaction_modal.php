@@ -21,6 +21,11 @@
                     <div class="row gy-4 mt-1 justify-content-center">
                         <div class="col-lg-12 content pricing">
                             <ul>
+                                <li class="pricing-item mt-0 d-flex justify-content-between"> <h4>Ongkir : <p class="jenis-ongkir"></p></h4><h4 class="total-ongkir"> </h4></li>
+                            </ul>
+                        </div>
+                        <div class="col-lg-12 content pricing">
+                            <ul>
                                 <li class="pricing-item mt-0 d-flex justify-content-between"> <h4>Total :</h4><h4 class="total-price"> </h4></li>
                             </ul>
                         </div>

@@ -13,7 +13,7 @@ class InvoicesModel extends Model
     protected $returnType       = 'object';
     protected $useSoftDeletes   = true;
     protected $protectFields    = true;
-    protected $allowedFields    = ['invoice_number', 'total_invoice', 'payment_method', 'payment_status', 'payment_proof', 'created_by', 'updated_by', 'deleted_by', 'is_deleted', 'user_id', 'receipt_number', 'delivery_service', 'cancel_reason', 'total_cart', 'shipping_cost'];
+    protected $allowedFields    = ['invoice_number', 'total_invoice', 'payment_method', 'payment_status', 'payment_proof', 'created_by', 'updated_by', 'deleted_by', 'is_deleted', 'user_id', 'receipt_number', 'delivery_service', 'cancel_reason', 'total_cart', 'shipping_cost', 'kode_ekspedisi', 'keterangan_ekspedisi'];
 
     protected bool $allowEmptyInserts = false;
     protected bool $updateOnlyChanged = true;

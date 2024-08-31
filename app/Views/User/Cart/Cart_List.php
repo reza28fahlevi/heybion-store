@@ -117,6 +117,8 @@
 <?= $this->include('User/Layout/Footer') ?>
 
 <script>
+    $('.btn-checkout').prop('disabled', true)
+
     function getProvince() {
         $("#province").empty()
         $("#province").append('<option value="">Pilih Province</option>')
@@ -142,7 +144,6 @@
     getProvince()
 
     function getCity(province) {
-        console.log(province)
         $("#city").empty()
         $("#city").append('<option value="">Pilih City</option>')
         $.ajax({
@@ -189,7 +190,7 @@
                     $("#courier").prop('disabled', false)
                     for (var i = 0; i < response.data.length; i++) {
                         for (var j = 0; j < response.data[i]["costs"].length; j++) {
-                            $("#courier").append('<option value="' + response.data[i]["costs"][j]["service"] + '" data-harga="' + response.data[i]["costs"][j]["cost"][0]["value"] + '">' + response.data[i]["costs"][j]["description"] + ' | Etd ' + response.data[i]["costs"][j]["cost"][0]["etd"] + ' days | Price ' + response.data[i]["costs"][j]["cost"][0]["value"] + '</option>');
+                            $("#courier").append('<option value="' + response.data[i]["costs"][j]["service"] + '" data-harga="' + response.data[i]["costs"][j]["cost"][0]["value"] + '" data-kode="' + response.data[i]["costs"][j]["service"]+ '" data-keterangan="' + response.data[i]["costs"][j]["description"]+ '">' + response.data[i]["costs"][j]["description"] + ' | Etd ' + response.data[i]["costs"][j]["cost"][0]["etd"] + ' days | Price ' + response.data[i]["costs"][j]["cost"][0]["value"] + '</option>');
                         }
                     }
                 } else {
@@ -200,6 +201,11 @@
     }
     getCost()
     $('#courier').on('change', function() {
+        if ($(this).val() == '') {
+            $('.btn-checkout').prop('disabled', true)
+        } else {
+            $('.btn-checkout').prop('disabled', false)
+        }
         var selectedOption = $(this).find('option:selected');
         var harga = selectedOption.data('harga');
         totalbilling(harga)
@@ -248,7 +254,6 @@
     }
 
     function totalbilling(courier) {
-        console.log(courier)
         var totalPrice = 0;
 
         $('.item-pricing').each(function() {
@@ -497,8 +502,12 @@
 
         $('.btn-checkout').on('click', function() {
             var ongkir = $('#courier').find('option:selected').data('harga');
+            var kode = $('#courier').find('option:selected').data('kode');
+            var keterangan = $('#courier').find('option:selected').data('keterangan');
             var form_data = new FormData();
             form_data.append('ongkir', ongkir);
+            form_data.append('kode', kode);
+            form_data.append('keterangan', keterangan);
             Swal.fire({
                 title: "Is the order is correct?",
                 text: "You can't change the order later",

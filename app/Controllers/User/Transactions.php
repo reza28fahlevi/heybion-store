@@ -441,6 +441,8 @@ class Transactions extends BaseController
             'payment_method' => 1,
             'payment_status' => 1,
             'user_id' => $user->user_id,
+            'kode_ekspedisi' => htmlspecialchars((string)$this->request->getPost('kode'), ENT_QUOTES),
+            'keterangan_ekspedisi' => htmlspecialchars((string)$this->request->getPost('keterangan'), ENT_QUOTES),
         ];
 
         // Load the database or model
