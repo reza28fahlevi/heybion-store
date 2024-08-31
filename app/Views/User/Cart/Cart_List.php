@@ -81,10 +81,10 @@
         if ($mycart) {
         ?>
             <div class="row gy-4 mx-5 my-2 justify-content-center cart-listing">
-                <div class="col-lg-8 content pricing">
-                    <div class="row mb-3">
+                <div class="col-lg-9 content pricing">
+                    <div class="row mb-3 form-input">
                         <label for="inputText" class="col-sm-2 col-form-label">Courier :</label>
-                        <div class="col-sm-8">
+                        <div class="col-sm-10">
                             <select class="form-control" name="courier" id="courier" required>
                             </select>
                         </div>

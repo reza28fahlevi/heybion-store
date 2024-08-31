@@ -1510,6 +1510,7 @@ section,
 .form-input input[type=password],
 .form-input input[type=email],
 .form-input input[type=file],
+.form-input select,
 .form-input textarea {
   font-size: 14px;
   padding: 10px 15px;
@@ -1524,6 +1525,7 @@ section,
 .form-input input[type=password]:focus,
 .form-input input[type=email]:focus,
 .form-input input[type=file]:focus,
+.form-input select:focus,
 .form-input textarea:focus {
   border-color: var(--accent-color);
 }
@@ -1532,6 +1534,7 @@ section,
 .form-input input[type=password]::placeholder,
 .form-input input[type=email]::placeholder,
 .form-input input[type=file]::placeholder,
+.form-input select::placeholder,
 .form-input textarea::placeholder {
   color: color-mix(in srgb, var(--default-color), transparent 70%);
 }
