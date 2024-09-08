@@ -121,6 +121,12 @@
                     }else{
                         $('.detail-shipping').parent().hide()
                     }
+                    if(response.data.invoice.cancel_reason){
+                        $('.detail-cancel').parent().show()
+                        $('.detail-cancel').html("Cancel Reason : " + response.data.invoice.cancel_reason)
+                    }else{
+                        $('.detail-cancel').parent().hide()
+                    }
                     // if(response.data.invoice.payment_status == 4){
                     //     $('.footer-transaction').append('<button type="button" class="btn btn-default btn-finish" data-trd="' + response.data.invoice.transaction_id + '">Finish Order</button>')
                     // }else{
