@@ -167,7 +167,7 @@
                     }else{
                         let timerInterval;
                         Swal.fire({
-                            title: "Login Success!",
+                            title: "Register Success!",
                             html: "Create account successfully, You must login first",
                             timer: 2000,
                             confirmButtonColor: "#8f160d",

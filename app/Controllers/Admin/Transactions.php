@@ -103,7 +103,7 @@ class Transactions extends BaseController
         }else{
             $this->model->where('payment_status', $status);
         }
-        $data = $this->model->where('deleted_at', null)->findAll($length, $start);
+        $data = $this->model->where('deleted_at', null)->orderBy('created_at', 'asc')->findAll($length, $start);
 
         foreach($data as $key => $val){
             $data[$key]->username = $this->modelUser->find($val->user_id)->username;
