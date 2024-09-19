@@ -83,7 +83,7 @@
             <div class="row gy-4 mx-5 my-2 justify-content-center cart-listing">
                 <div class="col-lg-9 content pricing">
                     <div class="row mb-3 form-input">
-                        <label for="inputText" class="col-sm-2 col-form-label">Notes :</label>
+                        <label for="inputText" class="col-sm-2 col-form-label">Note :</label>
                         <div class="col-sm-10">
                             <textarea name="notes" id="notes" class="form-control" placeholder="Size or Color"></textarea>
                         </div>
