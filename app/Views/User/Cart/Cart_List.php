@@ -83,6 +83,12 @@
             <div class="row gy-4 mx-5 my-2 justify-content-center cart-listing">
                 <div class="col-lg-9 content pricing">
                     <div class="row mb-3 form-input">
+                        <label for="inputText" class="col-sm-2 col-form-label">Notes :</label>
+                        <div class="col-sm-10">
+                            <textarea name="notes" id="notes" class="form-control" placeholder="Size or Color"></textarea>
+                        </div>
+                    </div>
+                    <div class="row mb-3 form-input">
                         <label for="inputText" class="col-sm-2 col-form-label">Courier :</label>
                         <div class="col-sm-10">
                             <select class="form-control" name="courier" id="courier" required>
@@ -446,27 +452,17 @@
 
         $('#f_address').on('submit', function(e) {
             e.preventDefault(); // Prevent the default form submission
-            var form_data = new FormData();
+            var form_data = new FormData(this);
 
-            var recipient_name = $('#recipient_name').val()
-            var phone_number = $('#phone_number').val()
-            var address = $('#address').val()
-            var pos_code = $('#pos_code').val()
             var id_city = $('#city').val()
             var id_province = $('#province').val()
             var city = $('#city').find('option:selected').text()
             var province = $('#province').find('option:selected').text()
-            var country = $('#country').val()
 
-            form_data.append('recipient_name', recipient_name)
-            form_data.append('phone_number', phone_number)
-            form_data.append('address', address)
-            form_data.append('pos_code', pos_code)
             form_data.append('id_city', id_city)
             form_data.append('id_province', id_province)
             form_data.append('city', city)
             form_data.append('province', province)
-            form_data.append('country', country)
             $.ajax({
                 url: '<?= site_url('updateaddress') ?>',
                 type: 'POST',
@@ -504,10 +500,12 @@
             var ongkir = $('#courier').find('option:selected').data('harga');
             var kode = $('#courier').find('option:selected').data('kode');
             var keterangan = $('#courier').find('option:selected').data('keterangan');
+            var notes = $('#notes').val();
             var form_data = new FormData();
             form_data.append('ongkir', ongkir);
             form_data.append('kode', kode);
             form_data.append('keterangan', keterangan);
+            form_data.append('notes', notes);
             Swal.fire({
                 title: "Is the order is correct?",
                 text: "You can't change the order later",
