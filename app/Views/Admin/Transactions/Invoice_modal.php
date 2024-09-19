@@ -31,7 +31,7 @@
                         </ul><!-- End List With badges -->
                     </div>
                     <div class="tab-pane fade" id="bordered-justified-address" role="tabpanel" aria-labelledby="address-tab">
-                        <p class="small fst-italic address-shpping">Sunt est soluta temporibus accusantium neque nam maiores cumque temporibus. Tempora libero non est unde veniam est qui dolor. Ut sunt iure rerum quae quisquam autem eveniet perspiciatis odit. Fuga sequi sed ea saepe at unde.</p>
+                        <p class="small fst-italic address-shpping"></p>
                     </div>
                     <div class="tab-pane fade img-payment-proof" id="bordered-justified-payment" role="tabpanel" aria-labelledby="payment-tab">
                         

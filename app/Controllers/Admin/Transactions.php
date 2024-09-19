@@ -156,6 +156,14 @@ class Transactions extends BaseController
                     <strong class="total-invoice">Rp. '.$invoice->total_invoice.'</strong>
                 </li>
             ';
+            if($invoice->notes){
+
+            $listProducts .= '
+                    <li class="list-group-item">
+                        Note : '.$invoice->notes.'
+                    </li>
+                ';
+            }
     
             $data = [
                 "userDetail" => $userAddress,

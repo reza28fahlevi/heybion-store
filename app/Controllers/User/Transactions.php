@@ -443,6 +443,7 @@ class Transactions extends BaseController
             'user_id' => $user->user_id,
             'kode_ekspedisi' => htmlspecialchars((string)$this->request->getPost('kode'), ENT_QUOTES),
             'keterangan_ekspedisi' => htmlspecialchars((string)$this->request->getPost('keterangan'), ENT_QUOTES),
+            'notes' => htmlspecialchars((string)$this->request->getPost('notes'), ENT_QUOTES),
         ];
 
         // Load the database or model

@@ -62,7 +62,7 @@ class Products extends BaseController
         if (!empty($search)) {
             $this->model->like('product_name', $search);
         }
-        $data = $this->model->where('deleted_at', null)->findAll($length, $start);
+        $data = $this->model->where('deleted_at', null)->orderBy('product_id', 'desc')->findAll($length, $start);
 
         // Prepare the response
         $response = [
