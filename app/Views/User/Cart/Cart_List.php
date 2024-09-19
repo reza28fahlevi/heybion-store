@@ -149,7 +149,8 @@
 
     getProvince()
 
-    function getCity(province) {
+    function getCity(province, id_city) {
+        $("#city").prop('disabled', true);
         $("#city").empty()
         $("#city").append('<option value="">Pilih City</option>')
         $.ajax({
@@ -159,10 +160,15 @@
                 'province': province
             },
             success: function(response) {
+
                 if (response.status === 'success') {
                     for (var i = 0; i < response.data.length; i++) {
                         $("#city").append('<option value="' + response.data[i]["city_id"] + '" data-poscode="' + response.data[i]["postal_code"] + '">' + response.data[i]["city_name"] + '</option>');
                     }
+                    if (id_city != '') {
+                        $('#city').val(id_city)
+                    }
+                    $("#city").prop('disabled', false)
                 } else {
                     alert(response.message);
                 }
@@ -171,7 +177,7 @@
     }
     $('#province').on('change', function() {
         $("#city").empty()
-        getCity($('#province').val())
+        getCity($('#province').val(), '')
     })
 
     $('#city').on('change', function() {
@@ -196,7 +202,7 @@
                     $("#courier").prop('disabled', false)
                     for (var i = 0; i < response.data.length; i++) {
                         for (var j = 0; j < response.data[i]["costs"].length; j++) {
-                            $("#courier").append('<option value="' + response.data[i]["costs"][j]["service"] + '" data-harga="' + response.data[i]["costs"][j]["cost"][0]["value"] + '" data-kode="' + response.data[i]["costs"][j]["service"]+ '" data-keterangan="' + response.data[i]["costs"][j]["description"]+ '">' + response.data[i]["costs"][j]["description"] + ' | Etd ' + response.data[i]["costs"][j]["cost"][0]["etd"] + ' days | Price ' + response.data[i]["costs"][j]["cost"][0]["value"] + '</option>');
+                            $("#courier").append('<option value="' + response.data[i]["costs"][j]["service"] + '" data-harga="' + response.data[i]["costs"][j]["cost"][0]["value"] + '" data-kode="' + response.data[i]["costs"][j]["service"] + '" data-keterangan="' + response.data[i]["costs"][j]["description"] + '">' + response.data[i]["costs"][j]["description"] + ' | Etd ' + response.data[i]["costs"][j]["cost"][0]["etd"] + ' days | Price ' + response.data[i]["costs"][j]["cost"][0]["value"] + '</option>');
                         }
                     }
                 } else {
@@ -435,9 +441,9 @@
                             $('#phone_number').val('0' + response.data.phone_number);
                             $('#address').val(response.data.address);
                             $('#pos_code').val(response.data.pos_code);
-                            $('#city').val(response.data.city);
-                            $('#province').val(response.data.province);
+                            $('#province').val(response.data.id_province);
                             $('#country').val(response.data.country);
+                            getCity($('#province').val(), response.data.id_city)
                         }
                     } else {
                         alert(response.message);
